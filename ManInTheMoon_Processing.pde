@@ -19,7 +19,7 @@ PImage walk[] = new PImage[] {character0R, character0L, character1R, character2R
 
 //movement control
 int locationX = 50;
-int locationY = 334;
+int locationY = 400;
 int speedY = 0;
 int frame = 0;
 boolean jumping = false;
@@ -31,7 +31,7 @@ boolean facingRight = true;
 // Game Mechanics
 float timer = 0;
 boolean clock = false;
-
+boolean inSchool = false;
 /*
 
 // Monster sprite (only one design)
@@ -40,7 +40,7 @@ PImage mon; // current monster frame
 
 // Scene animation
 int frontX = 0;
-int backX; 
+int backX = 0; 
 
 // Backgrounds
 PImage OS;
@@ -197,11 +197,11 @@ void draw() {
 //////////////////////////////////////////////// scene 0 ////////////////////////////////////////////////
   else if (scene == 0) {
     loadingScreen();
-    if (play) {
+    /*if (play) {
       OS_Music.play();
       OS_Music.loop();
       play = false;
-    }
+    }*/
   } 
 //////////////////////////////////////////////// scene -2 ////////////////////////////////////////////////
   else if (scene == -2) {
@@ -212,20 +212,37 @@ void draw() {
     instructions();
   }
 //////////////////////////////////////////////// scene -4 ////////////////////////////////////////////////
-    else if (scene == -4) {
-      devMenu();
-    }
-////////////////////////////////////////////////////////////////////////////////////////////////
-  else if (scene == 1) {
-    display(busStop, busStop);
-  } 
-////////////////////////////////////////////////////////////////////////////////////////////////
-  else if (scene == 2) {
-    school();
+  else if (scene == -4) {
+    devMenu();
   }
-////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
+  else if (scene == 1) {
+    display(busStop, busStop, 2500, 2500);
+  } 
+//////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
+  else if (scene == 2) {
+    if (!inSchool)
+      display(school, school, 2500, 2500);
+    else{
+      display(hallway, hallway, 2500, 2500);
+      while (clock) {
+        timer = timer + 0.001;
+        if (timer == 1) 
+          image(clock1, 0, 0, 800, 800);
+        if (timer == 2)
+          image(clock2, 0, 0, 800, 800);
+        if (timer == 3)
+          image(clock3, 0, 0, 800, 800);
+        if (timer == 3.5) {
+          clock = false;
+          break;
+        }
+      } //end while
+    }// end else
+  }
+//////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
   else if (scene == 3) {
-    xanadu1();
+    display(X_Fore, X_Back, 4325, 2454);
   } 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   /* else if (scene == 4) {
@@ -384,7 +401,7 @@ void jumping() { //WITH HELP FROM MS. WIEBE
   }
   if (speedY >= 40) {
     speedY = 0;
-    locationY = 334;
+    locationY = 400;
     jumping = false;
   }
 }//end of jumping 
@@ -523,63 +540,26 @@ void loadingScreen() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void display(PImage foreground, PImage background){ //add background parameter later
-    image(background, backX, 0, 2500, 800);
-    image(foreground, frontX, 0, 2500, 800);
+void display(PImage foreground, PImage background, int foreLength, int backLength){
+    image(background, backX, 0, backLength, 800);
+    image(foreground, frontX, 0, foreLength, 800);
     moving();
-    image(character, locationX, locationY, 150, 225);
-    if (locationX <= 10 && frontX >= 0){ //very very edge left
-      locationX = 10;
-    } else if (locationX >= 650 && frontX < 1800){ //fake edge right
+    image(character, locationX, locationY, 225, 225);
+    if (locationX <= -10 && frontX >= 0){ //very very edge left
+      locationX = -10;
+    } else if (locationX >= 400 && frontX > -(foreLength-800) && move == true){ //fake edge right
       frontX -= 10;
-      locationX = 650;
-    } else if (locationX <= 30 && frontX < 0){ //fake edge left
+      backX -= 2;
+      locationX = 400;
+    } else if (locationX <= 235 && frontX < 0 && move == true){ //fake edge left
       frontX += 10;
-      locationX = 30;
-    } else if (locationX >= 770){ //very very edge right
-      locationX = 770;
+      backX += 2;
+      locationX = 235;
+    } else if (locationX >= 625){ //very very edge right
+      locationX = 625;
     }
   }//end display
-  
-  
-// scene 2
 
-
-void school() {
-  scene = 2;
-
-  // when character goes into the door, clock = true.
-  while (clock) {
-    timer = timer + 0.001;
-    if (timer == 1) 
-      image(clock1, 0, 0, 800, 800);
-    if (timer == 2)
-      image(clock2, 0, 0, 800, 800);
-    if (timer == 3)
-      image(clock3, 0, 0, 800, 800);
-    if (timer == 3.5) {
-      clock = false;
-      break;
-    }
-  }
-} //end school
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// scene 3
-
-void xanadu1() {
-  scene = 3;
-  image(X_Fore, 0, 0, 9910, 800);
-  image(X_Back, 0, 0, 9910, 800);
-} 
-/*
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////// endScreen ///////////////////////////////////////////////////
@@ -589,6 +569,6 @@ void xanadu1() {
 
 void endScreen() {
   scene = 4;
- } */
+ }
 
 //my fav line of code
