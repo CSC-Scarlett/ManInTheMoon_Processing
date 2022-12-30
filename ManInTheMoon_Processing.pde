@@ -39,7 +39,7 @@ PImage mon; // current monster frame
 //PImage monWalk[] = {mon0R, mon0L, mon1R, mon2R, mon3r, mon1L, mon2L, mon3L}; */
 
 // Scene animation
-int frontX;
+int frontX = 0;
 int backX; 
 
 // Backgrounds
@@ -186,6 +186,7 @@ void setup() {
       gameStop = false;
     }
   }*/
+  
 
 void draw() {
 
@@ -216,7 +217,7 @@ void draw() {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////
   else if (scene == 1) {
-    busStop();
+    display(busStop);
   } 
 ////////////////////////////////////////////////////////////////////////////////////////////////
   else if (scene == 2) {
@@ -518,26 +519,29 @@ void loadingScreen() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// busStop ////////////////////////////////////////////////////
+/////////////////////////////////////////////////// story //////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// scene 1
 
-
-void busStop() {
-  scene = 1;
-  image(busStop, 0, 0, 2500, 800);
-  moving();
-  image(character, locationX, locationY, 150, 225);
+void display(PImage foreground, PImage background){ //add background parameter later
+    image(background, backX, 0, 2500, 800);
+    image(foreground, frontX, 0, 2500, 800);
+    moving();
+    image(character, locationX, locationY, 150, 225);
+    if (locationX <= 10 && frontX >= 0){ //very very edge left
+      locationX = 10;
+    } else if (locationX >= 650 && frontX < 1800){ //fake edge right
+      frontX -= 10;
+      locationX = 650;
+    } else if (locationX <= 30 && frontX < 0){ //fake edge left
+      frontX += 10;
+      locationX = 30;
+    } else if (locationX >= 770){ //very very edge right
+      locationX = 770;
+    }
+  }//end display
   
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// school /////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+  
 // scene 2
 
 
@@ -558,7 +562,7 @@ void school() {
       break;
     }
   }
-} 
+} //end school
 
 
 
