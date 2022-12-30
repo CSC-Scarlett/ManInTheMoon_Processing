@@ -1,5 +1,8 @@
 # ManInTheMoon_Processing
 
+to do:
+  - remember to load character sprites from array, not as individual variables
+
 instructions:
   - press 'a' to move left
   - press 'd' to move right
