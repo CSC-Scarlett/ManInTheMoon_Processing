@@ -11,10 +11,9 @@ boolean changeScene = false;
 
 // Chang'e animation sprites
 PImage character; //current Chang'e frame
-PImage character0R, character0L, character1R, character2R, character3R, character1L, character2L, character3L;
-PImage walk[] = new PImage[] {character0R, character0L, character1R, character2R, character3R, character1L, character2L, character3L}; //0R and 0L are stationary
-// PImage crouch[] = {character4R, character5R, character4L, character5L}; 
-// PImage jump[] = { };
+PImage charWalk[] = new PImage[8]; //0 and 4 stationary, 0-3 right facing, 4-7 left facing
+// PImage charCrouch[] = new PImage[4]; 
+// PImage charJump[] = new PImage[];
 
 
 //movement control
@@ -36,7 +35,7 @@ boolean inSchool = false;
 
 // Monster sprite (only one design)
 PImage mon; // current monster frame
-//PImage monWalk[] = {mon0R, mon0L, mon1R, mon2R, mon3r, mon1L, mon2L, mon3L}; */
+//PImage monWalk[] = new PImage[8]; */
 
 // Scene animation
 int frontX = 0;
@@ -122,17 +121,17 @@ void setup() {
   Dev_End = loadImage("DEV_End.png");
 
   // Character Animation
-  character0R = loadImage("CHAR_walk1L.png");
-  character1R = loadImage("CHAR_walk2L.png");
-  character2R = loadImage("CHAR_walk3L.png");
-  character3R = loadImage("CHAR_walk4L.png");
+  charWalk[0] = loadImage("CHAR_walk1L.png");
+  charWalk[1] = loadImage("CHAR_walk2L.png");
+  charWalk[2] = loadImage("CHAR_walk3L.png");
+  charWalk[3] = loadImage("CHAR_walk4L.png");
   
-  character0L = loadImage("CHAR_walk1L.png");
-  character1L = loadImage("CHAR_walk2L.png");
-  character2L = loadImage("CHAR_walk3L.png");
-  character3L = loadImage("CHAR_walk4L.png");
+  charWalk[4] = loadImage("CHAR_walk1L.png");
+  charWalk[5] = loadImage("CHAR_walk2L.png");
+  charWalk[6] = loadImage("CHAR_walk3L.png");
+  charWalk[7] = loadImage("CHAR_walk4L.png");
 
-  character = character0R;
+  character = charWalk[0];
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   busStop = loadImage("TEMP_BusStop.png");
@@ -148,7 +147,7 @@ void setup() {
   X_Back = loadImage("X_BACK.png");
   X_Fore = loadImage("X_FORE.png");
 
-}
+} //end setup
 
 /*  if (lobby == true) {
     lobbyMusic.loop();
@@ -338,35 +337,35 @@ void walking() {
   if (facingRight == true) {
     switch(frame) {
     case 0:
-      character = character0R;
+      character = charWalk[0];
       break;
     case 5:
-      character = character1R;
+      character = charWalk[1];
       break;
     case 10:
-      character = character2R;
+      character = charWalk[2];
       break;
     case 15:
-      character = character3R;
+      character = charWalk[3];
       break;
     }
   } else if (facingRight == false) {
     switch(frame) {
     case 0:
-      character = character0L;
+      character = charWalk[4];
       break;
     case 5:
-      character = character1L;
+      character = charWalk[5];
       break;
     case 10:
-      character = character2L;
+      character = charWalk[6];
       break;
     case 15:
-      character = character3L;
+      character = charWalk[7];
       break;
     }
   }
-}//end of walking
+}//end walking
 
 /*
 void crouching() {
@@ -404,7 +403,7 @@ void jumping() { //WITH HELP FROM MS. WIEBE
     locationY = 400;
     jumping = false;
   }
-}//end of jumping 
+}//end jumping 
 
 
 void moving() {
@@ -424,7 +423,7 @@ if (crouching == false)
     walking();
     //crouching();
     jumping();
-}//end of moving
+}//end moving
 
 
 void bullying() {
