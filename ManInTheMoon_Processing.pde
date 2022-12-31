@@ -393,16 +393,24 @@ void crouching() {
   }
 }//end of crouching
 */
-void jumping() { //WITH HELP FROM MS. WIEBE
+void jumping() { //WITH HELP FROM MS. WIEBE CS10 (Modified)
   locationY -= speedY;
-  if (jumping == true) {
-    speedY += 4;
-  }
-  if (speedY >= 40) {
-    speedY = 0;
-    locationY = 400;
+  if (speedY >= 40)
     jumping = false;
+  if (jumping == true)
+    speedY += 4;
+  if (jumping == false && speedY > 0){
+    speedY -= 4;
+    if (speedY <=0)
+      speedY = 0;
   }
+  /*else if (jumping == true && speedY > 0){
+    speedY -= 4;
+    if (locationY <= 400){
+      jumping = false;
+      locationY = 400;
+    }
+  }*/
 }//end jumping 
 
 

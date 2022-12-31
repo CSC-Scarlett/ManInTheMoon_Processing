@@ -2,6 +2,7 @@
 
 to do:
   - remember to load character sprites from array, not as individual variables
+  - WHY IS JUMPING NOT WORKING HOW I WANT IT TO WORK FIX IT RN
 
 instructions:
   - press 'a' to move left
