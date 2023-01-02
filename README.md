@@ -2,7 +2,7 @@
 
 to do:
   - remember to load character sprites from array, not as individual variables
-  - WHY IS JUMPING NOT WORKING HOW I WANT IT TO WORK FIX IT RN
+  - jumping works now but it SUCKS why can you still ascend
 
 instructions:
   - press 'a' to move left
