@@ -395,14 +395,19 @@ void crouching() {
 */
 void jumping() { //WITH HELP FROM MS. WIEBE CS10 (Modified)
   locationY -= speedY;
-  if (speedY >= 40)
+  println(locationY);
+  println();
+  if (speedY >= 28){
     jumping = false;
+  }
   if (jumping == true)
     speedY += 4;
-  if (jumping == false && speedY > 0){
+  if (jumping == false){
     speedY -= 4;
-    if (speedY <=0)
+    if (locationY >= 400){
+      locationY = 400;
       speedY = 0;
+    }
   }
   /*else if (jumping == true && speedY > 0){
     speedY -= 4;
