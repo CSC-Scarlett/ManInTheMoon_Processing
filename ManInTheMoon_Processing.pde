@@ -303,8 +303,10 @@ void keyPressed() {
     move = true;
     facingRight = false;
   }
-  else if (key == ' '){
+  else if (key == ' ' && jumping == false){
     jumping = true;
+    speedY = -40;
+    crouching = false;
   }
   else if (key == 'q') {
       bully = true;
@@ -312,7 +314,7 @@ void keyPressed() {
   else if (key == CODED){
     if (keyCode == CONTROL) {
       if (jumping == false){
-        crouching = true;
+        crouching = !crouching;
       }
     } // end keyCode
   } 
@@ -394,28 +396,15 @@ void crouching() {
 }//end of crouching
 */
 void jumping() { //WITH HELP FROM MS. WIEBE CS10 (Modified)
-  locationY -= speedY;
-  println(locationY);
-  println();
-  if (speedY >= 28){
+  locationY += speedY;
+  if (jumping == true) {
+    speedY += 4;
+  } 
+  if (speedY >= 44) {
+    speedY = 0;
+    locationY = 400;
     jumping = false;
   }
-  if (jumping == true)
-    speedY += 4;
-  if (jumping == false){
-    speedY -= 4;
-    if (locationY >= 400){
-      locationY = 400;
-      speedY = 0;
-    }
-  }
-  /*else if (jumping == true && speedY > 0){
-    speedY -= 4;
-    if (locationY <= 400){
-      jumping = false;
-      locationY = 400;
-    }
-  }*/
 }//end jumping 
 
 
