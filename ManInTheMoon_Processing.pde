@@ -12,7 +12,7 @@ boolean changeScene = false;
 // Chang'e animation sprites
 PImage character; //current Chang'e frame
 PImage charWalk[] = new PImage[8]; //0 and 4 stationary, 0-3 right facing, 4-7 left facing
-// PImage charCrouch[] = new PImage[4]; 
+// PImage charCrouch[] = new PImage[4];
 // PImage charJump[] = new PImage[];
 
 
@@ -33,13 +33,13 @@ boolean clock = false;
 boolean inSchool = false;
 /*
 
-// Monster sprite (only one design)
-PImage mon; // current monster frame
-//PImage monWalk[] = new PImage[8]; */
+ // Monster sprite (only one design)
+ PImage mon; // current monster frame
+ //PImage monWalk[] = new PImage[8]; */
 
 // Scene animation
 int frontX = 0;
-int backX = 0; 
+int backX = 0;
 
 // Backgrounds
 PImage OS;
@@ -64,7 +64,7 @@ PImage Dev_S3;
 PImage Dev_End;
 
 
-PImage busStop; 
+PImage busStop;
 PImage school;
 PImage hallway;
 PImage X_Back;
@@ -72,17 +72,17 @@ PImage X_Fore;
 
 /*
 // Props
-PImage note;
-PImage bus;
-PImage door1; 
-PImage door2;
-*/
+ PImage note;
+ PImage bus;
+ PImage door1;
+ PImage door2;
+ */
 PImage clock1;
 PImage clock2;
 PImage clock3;
 
 // Music
-boolean play = false;
+boolean play1 = false;
 SoundFile OS_Music;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,9 +90,9 @@ SoundFile OS_Music;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
-  size(800,800); //my fav line of code #2
+  size(800, 800); //my fav line of code #2
   background(255);
-  frameRate(4); 
+  frameRate(4);
 
   // Start screen
   startWhite = loadImage("START_White.png");
@@ -108,7 +108,7 @@ void setup() {
 
   Back = loadImage("BACK_white.png");
   Back_S = loadImage("BACK_Red.png");
-  
+
   Instructions = loadImage("Instructions.png");
 
   Settings = loadImage("Settings.png");
@@ -125,7 +125,7 @@ void setup() {
   charWalk[1] = loadImage("CHAR_walk2L.png");
   charWalk[2] = loadImage("CHAR_walk3L.png");
   charWalk[3] = loadImage("CHAR_walk4L.png");
-  
+
   charWalk[4] = loadImage("CHAR_walk1L.png");
   charWalk[5] = loadImage("CHAR_walk2L.png");
   charWalk[6] = loadImage("CHAR_walk3L.png");
@@ -147,86 +147,86 @@ void setup() {
   X_Back = loadImage("X_BACK.png");
   X_Fore = loadImage("X_FORE.png");
 
+  /* if (play1 == true) {
+    OS_Music.loop();
+    play1 = false;
+  } */
 } //end setup
 
-/*  if (lobby == true) {
-    lobbyMusic.loop();
-    lobby = false;
-  }
-  if (game == true) {
-    if (v <= 1 && v>0) {
-      lobbyMusic.amp(v);
-      v -= 0.1;
-    } if (v <= 0) {
-      lobbyMusic.stop();
-      v = 1.0;
-      gameMusic.amp(v);
-      gameMusic.loop();
-    //}
-    game = false;
-  }
-  if (game == false && lobby == false) {
-    if (v<= 1 && v>0) {
-      gameMusic.amp(v);
-      v -= 0.1;
-    } else if (v <= 0) {
-      gameMusic.stop();
-      v = 1.0;
-    }
-  }
-  
-  if (gameStop == true) {
-    if (v>0 && v <= 1.0) {
-      gameMusic.amp(v);
-      v -= 0.01;
-    }
-    if (v <= 0.0) {
-      gameMusic.stop();
-      gameStop = false;
-    }
-  }*/
-  
+/* if (game == true) {
+ if (v <= 1 && v>0) {
+ lobbyMusic.amp(v);
+ v -= 0.1;
+ } if (v <= 0) {
+ lobbyMusic.stop();
+ v = 1.0;
+ gameMusic.amp(v);
+ gameMusic.loop();
+ //}
+ game = false;
+ }
+ if (game == false && lobby == false) {
+ if (v<= 1 && v>0) {
+ gameMusic.amp(v);
+ v -= 0.1;
+ } else if (v <= 0) {
+ gameMusic.stop();
+ v = 1.0;
+ }
+ }
+ 
+ if (gameStop == true) {
+ if (v>0 && v <= 1.0) {
+ gameMusic.amp(v);
+ v -= 0.01;
+ }
+ if (v <= 0.0) {
+ gameMusic.stop();
+ gameStop = false;
+ }
+ }*/
+
 
 void draw() {
-
-//////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
+  play1 = true;
+  if (play1) {
+    OS_Music.play();
+    OS_Music.loop();
+    play1 = false;
+  }
+  //////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
   if (scene == -1) {
     startScreen();
-  } 
-//////////////////////////////////////////////// scene 0 ////////////////////////////////////////////////
+  }
+  //////////////////////////////////////////////// scene 0 ////////////////////////////////////////////////
   else if (scene == 0) {
     loadingScreen();
-    /*if (play) {
-      OS_Music.play();
-      OS_Music.loop();
-      play = false;
-    }*/
-  } 
-//////////////////////////////////////////////// scene -2 ////////////////////////////////////////////////
+  }
+  //////////////////////////////////////////////// scene -2 ////////////////////////////////////////////////
   else if (scene == -2) {
     gameSettings();
-  } 
-//////////////////////////////////////////////// scene -3 ////////////////////////////////////////////////
+  }
+  //////////////////////////////////////////////// scene -3 ////////////////////////////////////////////////
   else if (scene == -3) {
     instructions();
   }
-//////////////////////////////////////////////// scene -4 ////////////////////////////////////////////////
+  //////////////////////////////////////////////// scene -4 ////////////////////////////////////////////////
   else if (scene == -4) {
     devMenu();
   }
-/////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
+  /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
     display(busStop, busStop, 2500, 2500);
-  } 
-//////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
+  }
+  //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
     if (!inSchool)
       display(school, school, 2500, 2500);
-    else{
+    else {
       display(hallway, hallway, 2500, 2500);
       while (clock) {
         timer = timer + 0.001;
-        if (timer == 1) 
+        if (timer == 1)
           image(clock1, 0, 0, 800, 800);
         if (timer == 2)
           image(clock2, 0, 0, 800, 800);
@@ -239,14 +239,14 @@ void draw() {
       } //end while
     }// end else
   }
-//////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
+  //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
   else if (scene == 3) {
     display(X_Fore, X_Back, 4325, 2454);
-  } 
+  }
   ////////////////////////////////////////////////////////////////////////////////////////////////
   /* else if (scene == 4) {
-    endScreen();
-  } */
+   endScreen();
+   } */
 }
 
 
@@ -275,49 +275,43 @@ void mousePressed() {
   }
 
   if (scene == -4) {
-    if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280) 
+    if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280)
       scene = -1;
-    else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355) 
+    else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355)
       scene = 1;
-    else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435) 
+    else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435)
       scene = 2;
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 450 && mouseY <= 510)
       scene = 3;
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 540 && mouseY <= 600)
       scene = 4;
   }
-  
 }//end mousePressed
 
 
 void mouseReleased() {
-  
 }//end mouseReleased
 
 void keyPressed() {
-  if (key == 'd'){
+  if (key == 'd') {
     move = true;
     facingRight = true;
-  }
-  else if (key == 'a'){
+  } else if (key == 'a') {
     move = true;
     facingRight = false;
-  }
-  else if (key == ' ' && jumping == false){
+  } else if (key == ' ' && jumping == false) {
     jumping = true;
     speedY = -40;
     crouching = false;
-  }
-  else if (key == 'q') {
-      bully = true;
-  }
-  else if (key == CODED){
+  } else if (key == 'q') {
+    bully = true;
+  } else if (key == CODED) {
     if (keyCode == CONTROL) {
-      if (jumping == false){
+      if (jumping == false) {
         crouching = !crouching;
       }
     } // end keyCode
-  } 
+  }
 
   // 'e' key for interaction
   // 'q' key to hit
@@ -334,7 +328,7 @@ void keyReleased() {
 ///////////////////////////////////////////////// Movement /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- 
+
 void walking() {
   if (facingRight == true) {
     switch(frame) {
@@ -371,65 +365,64 @@ void walking() {
 
 /*
 void crouching() {
-  if (crouching == true) {
-    if (facingRight == true) {
-      switch(frame) {
-      case 0:
-        character = character4R;
-        break;
-      case 10:
-        character = character5R;
-        break;
-      }
-    }
-    if (facingRight == false) {
-      switch(frame) {
-      case 0:
-        character = character4L;
-        break;
-      case 10:
-        character = character5L;
-        break;
-      }
-    }
-  }
-}//end of crouching
-*/
+ if (crouching == true) {
+ if (facingRight == true) {
+ switch(frame) {
+ case 0:
+ character = character4R;
+ break;
+ case 10:
+ character = character5R;
+ break;
+ }
+ }
+ if (facingRight == false) {
+ switch(frame) {
+ case 0:
+ character = character4L;
+ break;
+ case 10:
+ character = character5L;
+ break;
+ }
+ }
+ }
+ }//end of crouching
+ */
 void jumping() { //WITH HELP FROM MS. WIEBE CS10 (Modified)
   locationY += speedY;
   if (jumping == true) {
     speedY += 4;
-  } 
+  }
   if (speedY >= 44) {
     speedY = 0;
     locationY = 400;
     jumping = false;
   }
-}//end jumping 
+}//end jumping
 
 
 void moving() {
   if (move == true) {
-  if (facingRight == true)
-    locationX += 10; 
-  if (facingRight == false)
-    locationX -= 10;
-  frame++;
+    if (facingRight == true)
+      locationX += 10;
+    if (facingRight == false)
+      locationX -= 10;
+    frame++;
     if (frame == 20 && crouching == false) {
       frame = 5;
     } else if (frame == 20 && crouching == true) {
       frame = 0;
     }
   }
-if (crouching == false)
+  if (crouching == false)
     walking();
-    //crouching();
-    jumping();
+  //crouching();
+  jumping();
 }//end moving
 
 
 void bullying() {
-  
 } //end bullying! 👨
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -440,11 +433,11 @@ void bullying() {
 // scene -1
 void startScreen() {
   scene = -1;
- if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
+  if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
     image(startGlow, 0, 0, 800, 800);
-  else 
-    image(startWhite, 0, 0, 800, 800);
-} 
+  else
+  image(startWhite, 0, 0, 800, 800);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -459,8 +452,8 @@ void gameSettings() {
   image(Back, 0, 0, 800, 800);
   if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
     image(Back_S, 0, 0, 800, 800);
-  else 
-    image(Back, 0,0,800,800);
+  else
+  image(Back, 0, 0, 800, 800);
 }
 
 
@@ -477,9 +470,9 @@ void instructions() {
   image(Back, 0, 0, 800, 800);
   if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
     image(Back_S, 0, 0, 800, 800);
-  else 
-    image(Back, 0,0,800,800);
-} 
+  else
+  image(Back, 0, 0, 800, 800);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// devMenu ///////////////////////////////////////////////////
@@ -488,26 +481,26 @@ void instructions() {
 // scene -4
 void devMenu() {
   scene = -4;
-  image(Dev, 0, 0, 800,800);
+  image(Dev, 0, 0, 800, 800);
 
-  if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280) 
+  if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280)
     image(Dev_Start, 0, 0, 800, 800);
-  else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355) 
+  else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355)
     image(Dev_S1, 0, 0, 800, 800);
-  else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435) 
+  else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435)
     image(Dev_S2, 0, 0, 800, 800);
   else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 450 && mouseY <= 510)
     image(Dev_S3, 0, 0, 800, 800);
   else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 540 && mouseY <= 600)
     image(Dev_End, 0, 0, 800, 800);
-  else 
-    image(Dev, 0, 0, 800, 800);
-  
+  else
+  image(Dev, 0, 0, 800, 800);
+
   image(Back, 0, 0, 800, 800);
   if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
     image(Back_S, 0, 0, 800, 800);
-  else 
-    image(Back, 0,0,800,800);
+  else
+  image(Back, 0, 0, 800, 800);
 }
 
 
@@ -519,7 +512,7 @@ void devMenu() {
 // scene 0
 
 void loadingScreen() {
-  
+
   scene = 0;
 
   if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305)
@@ -532,7 +525,6 @@ void loadingScreen() {
     image(OS_Dev, 0, 0, 800, 800);
   else
     image(OS, 0, 0, 800, 800);
-  
 } //end loadingScreen
 
 
@@ -541,25 +533,25 @@ void loadingScreen() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void display(PImage foreground, PImage background, int foreLength, int backLength){
-    image(background, backX, 0, backLength, 800);
-    image(foreground, frontX, 0, foreLength, 800);
-    moving();
-    image(character, locationX, locationY, 225, 225);
-    if (locationX <= -10 && frontX >= 0){ //very very edge left
-      locationX = -10;
-    } else if (locationX >= 400 && frontX > -(foreLength-800) && move == true){ //fake edge right
-      frontX -= 10;
-      backX -= 2;
-      locationX = 400;
-    } else if (locationX <= 235 && frontX < 0 && move == true){ //fake edge left
-      frontX += 10;
-      backX += 2;
-      locationX = 235;
-    } else if (locationX >= 625){ //very very edge right
-      locationX = 625;
-    }
-  }//end display
+void display(PImage foreground, PImage background, int foreLength, int backLength) {
+  image(background, backX, 0, backLength, 800);
+  image(foreground, frontX, 0, foreLength, 800);
+  moving();
+  image(character, locationX, locationY, 225, 225);
+  if (locationX <= -10 && frontX >= 0) { //very very edge left
+    locationX = -10;
+  } else if (locationX >= 400 && frontX > -(foreLength-800) && move == true) { //fake edge right
+    frontX -= 10;
+    backX -= 2;
+    locationX = 400;
+  } else if (locationX <= 235 && frontX < 0 && move == true) { //fake edge left
+    frontX += 10;
+    backX += 2;
+    locationX = 235;
+  } else if (locationX >= 625) { //very very edge right
+    locationX = 625;
+  }
+}//end display
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -570,6 +562,6 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
 
 void endScreen() {
   scene = 4;
- }
+}
 
 //my fav line of code
