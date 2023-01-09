@@ -64,9 +64,12 @@ PImage Dev_S3;
 PImage Dev_End;
 
 
-PImage busStop; 
-PImage school;
-PImage hallway;
+PImage B_Fore; 
+PImage B_Back;
+PImage S_Fore;
+PImage S_Back;
+PImage H_Fore;
+PImage H_Back;
 PImage X_Back;
 PImage X_Fore;
 
@@ -134,11 +137,15 @@ void setup() {
   character = charWalk[0];
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-  busStop = loadImage("TEMP_BusStop.png");
+  B_Back = loadImage("B_BACK.PNG");
+  B_Fore = loadImage("B_FORE.PNG");
 
   // School
-  school = loadImage("TEMP_School.png");
-  hallway = loadImage("TEMP_Hallway.png");
+  S_Back = loadImage("TEMP_School.png");
+  S_Fore = loadImage("TEMP_School.png");
+  H_Back = loadImage("TEMP_Hallway.png");
+  H_Fore = loadImage("TEMP_Hallway.png");
+  
   clock1 = loadImage("clock full.png");
   clock2 = loadImage("TEMP_Settings.png");
   clock3 = loadImage("TEMP_Settings.png");
@@ -216,14 +223,14 @@ void draw() {
   }
 /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
-    display(busStop, busStop, 2500, 2500);
+    display(B_Fore, B_Back, 2500, 2500);
   } 
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
     if (!inSchool)
-      display(school, school, 2500, 2500);
+      display(S_Fore, S_Back, 2500, 2500);
     else{
-      display(hallway, hallway, 2500, 2500);
+      display(H_Fore, H_Back, 2500, 2500);
       while (clock) {
         timer = timer + 0.001;
         if (timer == 1) 
