@@ -31,6 +31,7 @@ boolean facingRight = true;
 float timer = 0;
 boolean clock = false;
 boolean inSchool = false;
+boolean paused = false;
 /*
 
  // Monster sprite (only one design)
@@ -63,6 +64,9 @@ PImage Dev_S2;
 PImage Dev_S3;
 PImage Dev_End;
 
+PImage pause;
+PImage black;
+
 PImage B_Fore; 
 PImage B_Back;
 PImage S_Fore;
@@ -94,6 +98,7 @@ SoundFile OS_Music;
 void setup() {
   size(800, 800); //my fav line of code #2
   background(255);
+
   frameRate(50);
 
   // Start screen
@@ -134,10 +139,13 @@ void setup() {
   charWalk[7] = loadImage("CHAR_walk4L.PNG");
 
   character = charWalk[0];
+  
+  pause = loadImage("Pause.PNG");
+  black = loadImage("black.PNG");
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   B_Back = loadImage("B_BACK.PNG");
-  B_Fore = loadImage("B_FORE.PNG");
+  B_Fore = loadImage("B_FORE1.png");
 
   // School
   S_Back = loadImage("TEMP_School.png");
@@ -263,7 +271,7 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
-    display(B_Fore, B_Back, 2500, 2500);
+    display(B_Fore, B_Back, 3020, 2879);
   }
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
@@ -288,7 +296,7 @@ void draw() {
   }
   //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
   else if (scene == 3) {
-    display(X_Fore, X_Back, 4325, 2454);
+    display(X_Fore, X_Back, 4330, 2454);
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////
   /* else if (scene == 4) {
@@ -311,17 +319,17 @@ void mousePressed() {
       scene = -4;
   } // end loadingScreen mousePressed
 
-  if (scene == -1) {
+  if (scene == -1) { //start button
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
       scene = 0;
   } // end startScreen
 
-  if (scene == -2 || scene == -3 || scene == -4) {
+  if (scene == -2 || scene == -3 || scene == -4) { //back button
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
       scene = 0;
   }
 
-  if (scene == -4) {
+  if (scene == -4) { //Dev menu
     if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280)
       scene = -1;
     else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355)
@@ -332,6 +340,11 @@ void mousePressed() {
       scene = 3;
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 540 && mouseY <= 600)
       scene = 4;
+  }
+  if (scene >= 1){
+    if (mouseX >= 20 && mouseX <= 90 && mouseY >= 20 && mouseY <= 90){ //pause button
+      paused = !paused;
+    }
   }
 }//end mousePressed
 
@@ -492,9 +505,21 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
     frontX += 10;
     backX += 2;
     locationX = 235;
-  } else if (locationX >= 625) { //very very edge right
-    locationX = 625;
+  } else if (locationX >= 620) { //very very edge right
+    locationX = 620;
   }
+  if (!paused){
+    if (mouseX >= 20 && mouseX <= 90 && mouseY >= 20 && mouseY <= 90)
+      pause = loadImage("Pause_Glow.PNG");
+    else
+      pause = loadImage("Pause.PNG");
+  }
+  if (paused){
+    tint(255, 127);
+    image(black, 0, 0, 800, 800);
+    tint(255, 255);
+  }
+  image(pause, 20, 20, 70, 70);
 }//end display
 
 
