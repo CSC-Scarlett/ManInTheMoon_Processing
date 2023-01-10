@@ -94,7 +94,7 @@ SoundFile OS_Music;
 void setup() {
   size(800, 800); //my fav line of code #2
   background(255);
-  frameRate(4);
+  frameRate(50);
 
   // Start screen
   startWhite = loadImage("START_White.png");
@@ -123,15 +123,15 @@ void setup() {
   Dev_End = loadImage("DEV_End.png");
 
   // Character Animation
-  charWalk[0] = loadImage("CHAR_walk1L.png");
-  charWalk[1] = loadImage("CHAR_walk2L.png");
-  charWalk[2] = loadImage("CHAR_walk3L.png");
-  charWalk[3] = loadImage("CHAR_walk4L.png");
+  charWalk[0] = loadImage("CHAR_walk1R.PNG");
+  charWalk[1] = loadImage("CHAR_walk2R.PNG");
+  charWalk[2] = loadImage("CHAR_walk3R.PNG");
+  charWalk[3] = loadImage("CHAR_walk4R.PNG");
 
-  charWalk[4] = loadImage("CHAR_walk1L.png");
-  charWalk[5] = loadImage("CHAR_walk2L.png");
-  charWalk[6] = loadImage("CHAR_walk3L.png");
-  charWalk[7] = loadImage("CHAR_walk4L.png");
+  charWalk[4] = loadImage("CHAR_walk1L.PNG");
+  charWalk[5] = loadImage("CHAR_walk2L.PNG");
+  charWalk[6] = loadImage("CHAR_walk3L.PNG");
+  charWalk[7] = loadImage("CHAR_walk4L.PNG");
 
   character = charWalk[0];
 
@@ -481,7 +481,7 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   image(background, backX, 0, backLength, 800);
   image(foreground, frontX, 0, foreLength, 800);
   moving();
-  image(character, locationX, locationY, 225, 225);
+  image(character, locationX, locationY, 270, 270);
   if (locationX <= -10 && frontX >= 0) { //very very edge left
     locationX = -10;
   } else if (locationX >= 400 && frontX > -(foreLength-800) && move == true) { //fake edge right
