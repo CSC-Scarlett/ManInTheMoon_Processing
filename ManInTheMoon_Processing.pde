@@ -99,7 +99,7 @@ void setup() {
   size(800, 800); //my fav line of code #2
   background(255);
 
-  frameRate(50);
+  frameRate(2147483647);
 
   // Start screen
   startWhite = loadImage("START_White.png");
@@ -133,10 +133,10 @@ void setup() {
   charWalk[2] = loadImage("CHAR_walk3R.PNG");
   charWalk[3] = loadImage("CHAR_walk4R.PNG");
 
-  charWalk[4] = loadImage("CHAR_walk1L.PNG");
-  charWalk[5] = loadImage("CHAR_walk2L.PNG");
-  charWalk[6] = loadImage("CHAR_walk3L.PNG");
-  charWalk[7] = loadImage("CHAR_walk4L.PNG");
+  charWalk[4] = loadImage("CHAR_walk1L.png");
+  charWalk[5] = loadImage("CHAR_walk2L.png");
+  charWalk[6] = loadImage("CHAR_walk3L.png");
+  charWalk[7] = loadImage("CHAR_walk4L.png");
 
   character = charWalk[0];
   
@@ -271,7 +271,7 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
-    display(B_Fore, B_Back, 3020, 2879);
+    display(B_Fore, B_Back, 3020, 2004);
   }
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
@@ -353,24 +353,26 @@ void mouseReleased() {
 }//end mouseReleased
 
 void keyPressed() {
-  if (key == 'd') {
-    move = true;
-    facingRight = true;
-  } else if (key == 'a') {
-    move = true;
-    facingRight = false;
-  } else if (key == ' ' && jumping == false) {
-    jumping = true;
-    speedY = -40;
-    crouching = false;
-  } else if (key == 'q') {
-    bully = true;
-  } else if (key == CODED) {
-    if (keyCode == CONTROL) {
-      if (jumping == false) {
-        crouching = !crouching;
-      }
-    } // end keyCode
+  if (!paused){
+    if (key == 'd') {
+      move = true;
+      facingRight = true;
+    } else if (key == 'a') {
+      move = true;
+      facingRight = false;
+    } else if (key == ' ' && jumping == false) {
+      jumping = true;
+      speedY = -40;
+      crouching = false;
+    } else if (key == 'q') {
+      bully = true;
+    } else if (key == CODED) {
+      if (keyCode == CONTROL) {
+        if (jumping == false) {
+          crouching = !crouching;
+        }
+      } // end keyCode
+    }
   }
 
   // 'e' key for interaction
@@ -491,12 +493,13 @@ void bullying() {
 
 
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
+  println(locationX + " " + frontX);
   image(background, backX, 0, backLength, 800);
   image(foreground, frontX, 0, foreLength, 800);
   moving();
   image(character, locationX, locationY, 270, 270);
-  if (locationX <= -10 && frontX >= 0) { //very very edge left
-    locationX = -10;
+  if (locationX <= -90 && frontX >= 0) { //very very edge left
+    locationX = -90;
   } else if (locationX >= 400 && frontX > -(foreLength-800) && move == true) { //fake edge right
     frontX -= 10;
     backX -= 2;
