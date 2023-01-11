@@ -74,6 +74,7 @@ PImage S_Fore;
 PImage S_Back;
 PImage H_Fore;
 PImage H_Back;
+PImage X1;
 PImage X_Back;
 PImage X_Fore;
 
@@ -100,7 +101,7 @@ void setup() {
   size(800, 800); //my fav line of code #2
   background(255);
 
-  frameRate(100);
+  frameRate(1000);
 
   // Start screen
   startWhite = loadImage("START_White.png");
@@ -159,6 +160,7 @@ void setup() {
   clock3 = loadImage("TEMP_Settings.png");
 
   // Xanadu
+  X1 = loadImage("hallway door alone.png");
   X_Back = loadImage("X_BACK.png");
   X_Fore = loadImage("X_FORE.png");
 
@@ -304,6 +306,10 @@ void draw() {
       } //end while
     }// end else
   }
+  //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
+  else if (scene == 2.5) {
+    display(X1, black, 3222, 2000);
+  }
   //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
   else if (scene == 3) {
     display(X_Fore, X_Back, 4330, 2454);
@@ -383,6 +389,10 @@ void keyPressed() {
         }
       } // end keyCode
     }
+  }
+  
+  if (key == 'p') {
+    scene = 2.5;
   }
 
   // 'e' key for interaction
