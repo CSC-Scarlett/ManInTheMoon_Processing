@@ -41,6 +41,7 @@ boolean paused = false;
 // Scene animation
 int frontX = 0;
 int backX = 0;
+int relativeX;
 
 // Backgrounds
 PImage OS;
@@ -99,7 +100,7 @@ void setup() {
   size(800, 800); //my fav line of code #2
   background(255);
 
-  frameRate(2147483647);
+  frameRate(100);
 
   // Start screen
   startWhite = loadImage("START_White.png");
@@ -208,6 +209,7 @@ void draw() {
     OS_Music.loop();
     play1 = false;
   }
+  relativeX = abs(frontX) + locationX;
   //////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
   if (scene == -1) { // start screen
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
@@ -271,6 +273,14 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
+    if (relativeX >= 2060 && relativeX <= 2400)
+      B_Fore = loadImage("B_FORE_Bench.PNG");
+    if (relativeX >= 1770 && relativeX <=1890)
+      B_Fore = loadImage("B_FORE_Garbage.PNG");
+    if (relativeX >= 1895 && relativeX <= 2050)
+      B_Fore = loadImage("B_FORE_Sign.PNG");
+    else
+      B_Fore = loadImage("B_FORE1.png");
     display(B_Fore, B_Back, 3020, 2004);
   }
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
@@ -493,7 +503,7 @@ void bullying() {
 
 
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
-  println(locationX + " " + frontX);
+  println(relativeX);
   image(background, backX, 0, backLength, 800);
   image(foreground, frontX, 0, foreLength, 800);
   moving();
