@@ -65,8 +65,14 @@ PImage Dev_S2;
 PImage Dev_S3;
 PImage Dev_End;
 
+//Pause menu
 PImage pause;
+PImage pause_S;
 PImage black;
+PImage PM;
+PImage PM_Return;
+PImage PM_Instructions;
+PImage PM_Settings;
 
 PImage B_Fore; 
 PImage B_Back;
@@ -143,10 +149,14 @@ void setup() {
   
   pause = loadImage("Pause.PNG");
   black = loadImage("black.PNG");
+  PM = loadImage("PM.PNG");
+  PM_Return = loadImage("PM_Return.PNG");
+  PM_Instructions = loadImage("PM_Instructions.PNG");
+  PM_Settings = loadImage("PM_Settings.PNG");
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   B_Back = loadImage("B_BACK.PNG");
-  B_Fore = loadImage("B_FORE1.png");
+  B_Fore = loadImage("B_FORE1.PNG");
 
   // School
   S_Back = loadImage("TEMP_School.png");
@@ -209,7 +219,7 @@ void draw() {
     OS_Music.loop();
     play1 = false;
   }
-  relativeX = abs(frontX) + locationX;
+  relativeX = abs(frontX) + mouseX;
   //////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
   if (scene == -1) { // start screen
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
@@ -273,14 +283,14 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
-    if (relativeX >= 2060 && relativeX <= 2400)
-      B_Fore = loadImage("B_FORE_Bench.PNG");
+    if (relativeX >= 1960 && relativeX <= 2090 && mouseY >= 460 && mouseY <= 615)
+      B_Fore = loadImage("B_FORE_Garbage.PNG");
     if (relativeX >= 1770 && relativeX <=1890)
       B_Fore = loadImage("B_FORE_Garbage.PNG");
     if (relativeX >= 1895 && relativeX <= 2050)
       B_Fore = loadImage("B_FORE_Sign.PNG");
     else
-      B_Fore = loadImage("B_FORE1.png");
+      B_Fore = loadImage("B_FORE1.PNG");
     display(B_Fore, B_Back, 3020, 2004);
   }
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
@@ -503,7 +513,7 @@ void bullying() {
 
 
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
-  println(relativeX);
+  //println(relativeX);
   image(background, backX, 0, backLength, 800);
   image(foreground, frontX, 0, foreLength, 800);
   moving();
@@ -531,6 +541,18 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
     tint(255, 127);
     image(black, 0, 0, 800, 800);
     tint(255, 255);
+    if (mouseX >= 235 && mouseX <= 545){
+      if (mouseY >= 195 && mouseY <= 285)
+        image(PM_Return, 0, 0, 800, 800);
+      else if (mouseY >= 320 && mouseY <= 410)
+        image(PM_Instructions, 0, 0, 800, 800);
+      else if (mouseY >= 440 && mouseY <= 535)
+        image(PM_Settings, 0, 0, 800, 800);
+      else
+        image(PM, 0, 0, 800, 800);
+    }
+    else
+      image(PM, 0, 0, 800, 800);
   }
   image(pause, 20, 20, 70, 70);
 }//end display
