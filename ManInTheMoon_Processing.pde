@@ -94,6 +94,10 @@ PImage X_Fore;
 PImage clock1;
 PImage clock2;
 PImage clock3;
+PImage NL_1; // nightlight (purple light, okay to walk through; will kill monster)
+PImage NL_2;
+PImage ML_1; // moonlight (not okay to walk through; will kill monster and also YOU)
+PImage ML_2;
 
 // Music
 boolean play1 = false;
@@ -173,6 +177,10 @@ void setup() {
   X1 = loadImage("hallway door alone.png");
   X_Back = loadImage("X_BACK.png");
   X_Fore = loadImage("X_FORE.PNG");
+  NL_1 = loadImage("nightlight1.PNG");
+  NL_2 = loadImage("nightlight2.PNG");
+  ML_1 = loadImage("moonlight1.PNG");
+  ML_2 = loadImage("moonlight2.PNG");
 
   /* if (play1 == true) {
     OS_Music.loop();
@@ -389,7 +397,8 @@ void mousePressed() {
     if (mouseX >= 417 && mouseX <= 660 && mouseY >= 160 && mouseY <= 610) {
       scene = 3;
       locationX = 50;
-      
+      backX = 0;
+      frontX = 0;
     }
   }
 }//end mousePressed
@@ -423,7 +432,6 @@ void keyPressed() {
   
   if (key == 'p') {
     scene = 2.5;
-    locationX = 179;
   }
 
   // 'e' key for interaction
@@ -587,3 +595,17 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   }
   image(pause, 20, 20, 70, 70);
 }//end display
+
+/* void light(int foreLength, int backLength) {
+  float light1 = random(1, 10);
+  if (light1 >= 5)
+    image(NL_1, 0, 0);
+  else 
+    image(NL_2, 0, 0);
+     
+  float light2 = random(1, 10);
+  if (light1 >= 5)
+    image(ML_1, 0, 0);
+  else 
+    image(ML_2, 0, 0);
+} */
