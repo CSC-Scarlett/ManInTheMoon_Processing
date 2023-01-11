@@ -74,7 +74,10 @@ PImage PM_Return;
 PImage PM_Instructions;
 PImage PM_Settings;
 
-PImage B_Fore; 
+PImage B_Fore;
+PImage B_Fore_Garbage;
+PImage B_Fore_Sign;
+PImage B_Fore_Bench;
 PImage B_Back;
 PImage S_Fore;
 PImage S_Back;
@@ -156,7 +159,10 @@ void setup() {
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   B_Back = loadImage("B_BACK.PNG");
-  B_Fore = loadImage("B_FORE1.PNG");
+  B_Fore = loadImage("B_FORE1.png");
+  B_Fore_Garbage = loadImage("B_FORE_Garbage.PNG");
+  B_Fore_Sign = loadImage("B_FORE_Sign.PNG");
+  B_Fore_Bench = loadImage("B_FORE_Bench.PNG");
 
   // School
   S_Back = loadImage("TEMP_School.png");
@@ -284,15 +290,14 @@ void draw() {
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
     if (relativeX >= 1960 && relativeX <= 2090 && mouseY >= 460 && mouseY <= 615)
-      B_Fore = loadImage("B_FORE_Garbage.PNG");
-    if (relativeX >= 1770 && relativeX <=1890)
-      B_Fore = loadImage("B_FORE_Garbage.PNG");
-    if (relativeX >= 1895 && relativeX <= 2050)
-      B_Fore = loadImage("B_FORE_Sign.PNG");
+      display(B_Fore_Bench, B_Back, 2915, 2004);
+    if (relativeX >= 1970 && relativeX <= 2080 && mouseY >= 465 && mouseY <= 615)
+      display(B_Fore_Garbage, B_Back, 2915, 2004);
+    if (relativeX >= 2090 && relativeX <= 2245 && mouseY >= 235 && mouseY <= 615)
+      display(B_Fore_Sign, B_Back, 2915, 2004);
     else
-      B_Fore = loadImage("B_FORE1.PNG");
-    display(B_Fore, B_Back, 3020, 2004);
-  }
+      display(B_Fore, B_Back, 3020, 2004);
+  }//end scene 1
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
     if (!inSchool)
