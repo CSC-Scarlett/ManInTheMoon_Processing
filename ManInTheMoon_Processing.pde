@@ -6,7 +6,6 @@ import processing.sound.*; // sound library import
 
 // Scene control
 float scene = -1;
-boolean changeScene = false;
 
 
 // Chang'e animation sprites
@@ -32,6 +31,7 @@ float timer = 0;
 boolean clock = false;
 boolean inSchool = false;
 boolean paused = false;
+boolean sceneChange = false;
 /*
 
  // Monster sprite (only one design)
@@ -162,7 +162,7 @@ void setup() {
   // Xanadu
   X1 = loadImage("hallway door alone.png");
   X_Back = loadImage("X_BACK.png");
-  X_Fore = loadImage("X_FORE.png");
+  X_Fore = loadImage("X_FORE.PNG");
 
   /* if (play1 == true) {
     OS_Music.loop();
@@ -253,7 +253,6 @@ void draw() {
   //////////////////////////////////////////////// scene -4 ////////////////////////////////////////////////
   else if (scene == -4) { // Dev menu
     image(Dev, 0, 0, 800, 800);
-
     if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280)
       image(Dev_Start, 0, 0, 800, 800);
     else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355)
@@ -287,6 +286,10 @@ void draw() {
   }
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
+    if (sceneChange) {
+      locationX = 50;
+      sceneChange = false;
+    }
     if (!inSchool)
       display(S_Fore, S_Back, 2500, 2500);
     else{
@@ -305,19 +308,28 @@ void draw() {
         }
       } //end while
     }// end else
+    sceneChange = false;
   }
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
   else if (scene == 2.5) {
+    if (sceneChange) {
+      locationX = 50;
+      sceneChange = false;
+    }
     display(X1, black, 3222, 2000);
   }
   //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
   else if (scene == 3) {
+    if (sceneChange) {
+      locationX = 50;
+      sceneChange = false;
+    }
     display(X_Fore, X_Back, 4330, 2454);
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  /* else if (scene == 4) {
-   endScreen();
-   } */
+  else if (scene == 4) {
+   
+  } 
 }
 
 
@@ -362,6 +374,14 @@ void mousePressed() {
       paused = !paused;
     }
   }
+  
+  if (scene == 2.5) {
+    if (mouseX >= 417 && mouseX <= 660 && mouseY >= 160 && mouseY <= 610) {
+      scene = 3;
+      locationX = 50;
+      
+    }
+  }
 }//end mousePressed
 
 
@@ -393,6 +413,7 @@ void keyPressed() {
   
   if (key == 'p') {
     scene = 2.5;
+    locationX = 179;
   }
 
   // 'e' key for interaction
@@ -487,9 +508,9 @@ void jumping() { //WITH HELP FROM MS. WIEBE CS10 (Modified)
 void moving() {
   if (move == true) {
     if (facingRight == true)
-      locationX += 10;
+      locationX += 8;
     if (facingRight == false)
-      locationX -= 10;
+      locationX -= 8;
     frame++;
     if (frame == 20 && crouching == false) {
       frame = 5;
@@ -513,7 +534,7 @@ void bullying() {
 
 
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
-  println(relativeX);
+  //println(relativeX);
   image(background, backX, 0, backLength, 800);
   image(foreground, frontX, 0, foreLength, 800);
   moving();
@@ -544,16 +565,3 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   }
   image(pause, 20, 20, 70, 70);
 }//end display
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// endScreen ///////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// scene ?
-
-void endScreen() {
-  scene = 4;
-}
-
-//my fav line of code
