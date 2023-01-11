@@ -6,6 +6,7 @@ import processing.sound.*; // sound library import
 
 // Scene control
 float scene = -1;
+float sceneNum = 0;
 
 
 // Chang'e animation sprites
@@ -161,7 +162,7 @@ void setup() {
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   B_Back = loadImage("B_BACK.PNG");
-  B_Fore = loadImage("B_FORE1.PNG");
+  B_Fore = loadImage("B_FORE1.png");
 
   // School
   S_Back = loadImage("TEMP_School.png");
@@ -292,6 +293,7 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
+    sceneNum = 1;
     if (relativeX >= 1960 && relativeX <= 2090 && mouseY >= 460 && mouseY <= 615)
       B_Fore = loadImage("B_FORE_Garbage.PNG");
     if (relativeX >= 1770 && relativeX <=1890)
@@ -299,11 +301,12 @@ void draw() {
     if (relativeX >= 1895 && relativeX <= 2050)
       B_Fore = loadImage("B_FORE_Sign.PNG");
     else
-      B_Fore = loadImage("B_FORE1.PNG");
+      B_Fore = loadImage("B_FORE1.png");
     display(B_Fore, B_Back, 3020, 2004);
   }
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
+    sceneNum = 2;
     if (sceneChange) {
       locationX = 50;
       sceneChange = false;
@@ -330,6 +333,7 @@ void draw() {
   }
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
   else if (scene == 2.5) {
+    sceneNum = 2.5;
     if (sceneChange) {
       locationX = 50;
       sceneChange = false;
@@ -338,11 +342,13 @@ void draw() {
   }
   //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
   else if (scene == 3) {
+    sceneNum = 3;
     if (sceneChange) {
       locationX = 50;
       sceneChange = false;
     }
     display(X_Fore, X_Back, 4330, 2454);
+    light(4330);
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////
   else if (scene == 4) {
@@ -372,7 +378,7 @@ void mousePressed() {
 
   if (scene == -2 || scene == -3 || scene == -4) { //back button
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
-      scene = 0;
+      scene = sceneNum;
   }
 
   if (scene == -4) { //Dev menu
@@ -399,6 +405,17 @@ void mousePressed() {
       locationX = 50;
       backX = 0;
       frontX = 0;
+    }
+  }
+  
+  if (paused) {
+    if (mouseX >= 235 && mouseX <= 545){
+      if (mouseY >= 195 && mouseY <= 285)
+        scene = 0;
+      else if (mouseY >= 320 && mouseY <= 410)
+        scene = -3;
+      else if (mouseY >= 440 && mouseY <= 535)
+        scene = -2;
     }
   }
 }//end mousePressed
@@ -596,7 +613,11 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   image(pause, 20, 20, 70, 70);
 }//end display
 
-/* void light(int foreLength, int backLength) {
+ void light(int foreLength) {
+   image(NL_1, frontX, 0, foreLength, 800);
+   image(ML_2, frontX, 0, foreLength, 800);
+   
+  /*
   float light1 = random(1, 10);
   if (light1 >= 5)
     image(NL_1, 0, 0);
@@ -607,5 +628,5 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   if (light1 >= 5)
     image(ML_1, 0, 0);
   else 
-    image(ML_2, 0, 0);
-} */
+    image(ML_2, 0, 0); */
+} 
