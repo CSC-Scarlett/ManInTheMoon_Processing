@@ -33,6 +33,9 @@ boolean clock = false;
 boolean inSchool = false;
 boolean paused = false;
 boolean sceneChange = false;
+boolean goodEnd = false;
+boolean badEnd1 = false; // Death from monster
+boolean badEnd2 = false; // Death from light
 /*
 
  // Monster sprite (only one design)
@@ -177,7 +180,7 @@ void setup() {
   // Xanadu
   X1 = loadImage("hallway door alone.png");
   X_Back = loadImage("X_BACK.png");
-  X_Fore = loadImage("X_FORE.PNG");
+  X_Fore = loadImage("X_FORE.png");
   NL_1 = loadImage("nightlight1.PNG");
   NL_2 = loadImage("nightlight2.PNG");
   ML_1 = loadImage("moonlight1.PNG");
@@ -332,7 +335,7 @@ void draw() {
     sceneChange = false;
   }
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
-  else if (scene == 2.5) {
+  else if (scene == 2.5) { 
     sceneNum = 2.5;
     if (sceneChange) {
       locationX = 50;
@@ -341,7 +344,7 @@ void draw() {
     display(X1, black, 3222, 2000);
   }
   //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
-  else if (scene == 3) {
+  else if (scene == 3) { 
     sceneNum = 3;
     if (sceneChange) {
       locationX = 50;
@@ -350,10 +353,18 @@ void draw() {
     display(X_Fore, X_Back, 4330, 2454);
     light(4330);
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  else if (scene == 4) {
-   
+  /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
+  else if (scene == 4) { // good end (you escape!)
+    
   } 
+  /////////////////////////////////////////////// end2 /////////////////////////////////////////////////
+  else if (scene == 5) { // bad end (you died O_O)
+    if ( badEnd1 ) {
+      // you got eaten by a monster lol loser
+    } else if ( badEnd2 ) {
+      // you touched the light, oops
+    }
+  }
 }
 
 
