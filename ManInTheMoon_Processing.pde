@@ -38,7 +38,7 @@ boolean paused = false;
 boolean sceneChange = false;
 boolean goodEnd = false;
 boolean badEnd1 = false; // Death from monster
-boolean badEnd2 = false; // Death from light
+boolean badEnd2 = false; // Death from lights
 
  // Monster sprite (only one design)
  PImage monster; // current monster frame
