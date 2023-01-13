@@ -7,6 +7,8 @@ import processing.sound.*; // sound library import
 // Scene control
 float scene = -1;
 
+//aesthetics :)))))))))))))))))))))))))))))))))))))))))000
+PFont subtitle;
 
 // Chang'e animation sprites
 PImage character; //current Chang'e frame
@@ -25,6 +27,7 @@ boolean crouching = false;
 boolean move = false;
 boolean bully = false;
 boolean facingRight = true;
+boolean clicked = false;
 
 // Game Mechanics
 float timer = 0;
@@ -32,16 +35,23 @@ boolean clock = false;
 boolean inSchool = false;
 boolean paused = false;
 boolean sceneChange = false;
+<<<<<<< Updated upstream
 /*
+=======
+boolean goodEnd = false;
+boolean badEnd1 = false; // Death from monster
+boolean badEnd2 = false; // Death from light
+>>>>>>> Stashed changes
 
- // Monster sprite (only one design)
- PImage mon; // current monster frame
- //PImage monWalk[] = new PImage[8]; */
+// Monster sprite (only one design)
+PImage monster; // current monster frame
+PImage monWalk[] = new PImage[4];
 
 // Scene animation
 int frontX = 0;
 int backX = 0;
 int relativeX;
+int transparency = 0;
 
 // Backgrounds
 PImage OS;
@@ -111,6 +121,8 @@ void setup() {
   background(255);
 
   frameRate(1000);
+  
+  subtitle = createFont("Arial Narrow", 25);
 
   // Start screen
   startWhite = loadImage("START_White.png");
@@ -150,6 +162,15 @@ void setup() {
   charWalk[7] = loadImage("CHAR_walk4L.png");
 
   character = charWalk[0];
+  
+  // Monster Animation
+  monWalk[0] = loadImage("TEMP_Settings.png");
+  monWalk[1] = loadImage("TEMP_Dev.png");
+  
+  monWalk[2] = loadImage("TEMP_Settings.png");
+  monWalk[3] = loadImage("TEMP_Dev.png");
+  
+  monster = monWalk[0];
   
   pause = loadImage("Pause.PNG");
   black = loadImage("black.PNG");
@@ -228,6 +249,9 @@ void draw() {
     play1 = false;
   }
   relativeX = abs(frontX) + mouseX;
+  textFont(subtitle);
+  textSize(25);
+  fill(39, 86, 72);
   //////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
   if (scene == -1) { // start screen
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
@@ -290,6 +314,7 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
+<<<<<<< Updated upstream
     if (relativeX >= 1960 && relativeX <= 2090 && mouseY >= 460 && mouseY <= 615)
       display(B_Fore_Bench, B_Back, 2915, 2004);
     if (relativeX >= 1970 && relativeX <= 2080 && mouseY >= 465 && mouseY <= 615)
@@ -298,6 +323,27 @@ void draw() {
       display(B_Fore_Sign, B_Back, 2915, 2004);
     else
       display(B_Fore, B_Back, 3020, 2004);
+=======
+    sceneNum = 1;
+    display(B_Fore, B_Back, 3020, 2004);
+    if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610){
+      B_Fore = loadImage("B_FORE_Garbage.PNG");
+      if (clicked == true){
+        println("yo");
+        timer += 0.1;
+        text("dorothy", 250, 740);
+        if (timer == 5){
+          timer = 0;
+          clicked = false;
+        }
+      }
+    } else if (relativeX >= 2090 && relativeX <= 2235 && mouseY >= 240 && mouseY <= 610){
+      B_Fore = loadImage("B_FORE_Sign.PNG");
+  } else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610){
+      B_Fore = loadImage("B_FORE_Bench.PNG");
+  } else
+      B_Fore = loadImage("B_FORE1.png");
+>>>>>>> Stashed changes
   }//end scene 1
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
@@ -324,7 +370,7 @@ void draw() {
       } //end while
     }// end else
     sceneChange = false;
-  }
+  }//end scene 2
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
   else if (scene == 2.5) {
     if (sceneChange) {
@@ -349,7 +395,8 @@ void draw() {
 
 
 void mousePressed() {
-  println(mouseX + " " + mouseY);
+  //println(mouseX + " " + mouseY);
+  println(relativeX + " " + mouseY);
 
   if (scene == 0) {
     if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305) //Start
@@ -390,11 +437,38 @@ void mousePressed() {
     }
   }
   
+  if (scene == 1){
+    if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610)
+      clicked = true;
+    else if (relativeX >= 2090 && relativeX <= 2235 && mouseY >= 240 && mouseY <= 610)
+      clicked = true;
+    else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610)
+      clicked = true;
+  }
+  
   if (scene == 2.5) {
     if (mouseX >= 417 && mouseX <= 660 && mouseY >= 160 && mouseY <= 610) {
       scene = 3;
       locationX = 50;
+<<<<<<< Updated upstream
       
+=======
+      backX = 0;
+      frontX = 0;
+    }
+  }
+  
+  if (paused) {
+    if (mouseX >= 235 && mouseX <= 545){
+      if (mouseY >= 195 && mouseY <= 285){
+        scene = 0;
+        paused = false;
+      }
+      else if (mouseY >= 320 && mouseY <= 410)
+        scene = -3;
+      else if (mouseY >= 440 && mouseY <= 535)
+        scene = -2;
+>>>>>>> Stashed changes
     }
   }
 }//end mousePressed
@@ -592,3 +666,40 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   }
   image(pause, 20, 20, 70, 70);
 }//end display
+<<<<<<< Updated upstream
+=======
+
+ void light(int foreLength) {
+   image(NL_1, frontX, 0, foreLength, 800);
+   image(ML_2, frontX, 0, foreLength, 800);
+   
+  /*
+  float light1 = random(1, 10);
+  if (light1 >= 5)
+    image(NL_1, 0, 0);
+  else 
+    image(NL_2, 0, 0);
+     
+  float light2 = random(1, 10);
+  if (light1 >= 5)
+    image(ML_1, 0, 0);
+  else 
+    image(ML_2, 0, 0); */
+} 
+
+/*void fadeTransition() { //weird and not right
+  if (transition == true) {
+    image(black, 0, 0, 800, 800);
+    tint(255, transparency);
+    do {
+      transparency += 5;
+      println(transparency);
+    } while (transparency<=255);
+    load = true;
+    do {
+      transparency -= 5;
+    } while (transparency>=0);
+    transition = false;
+  }
+}//end fadeTransition*/
+>>>>>>> Stashed changes
