@@ -6,6 +6,7 @@ import processing.sound.*; // sound library import
 
 // Scene control
 float scene = -1;
+float sceneNum = 0;
 
 //aesthetics :)))))))))))))))))))))))))))))))))))))))))000
 PFont subtitle;
@@ -35,17 +36,13 @@ boolean clock = false;
 boolean inSchool = false;
 boolean paused = false;
 boolean sceneChange = false;
-<<<<<<< Updated upstream
-/*
-=======
 boolean goodEnd = false;
 boolean badEnd1 = false; // Death from monster
 boolean badEnd2 = false; // Death from light
->>>>>>> Stashed changes
 
-// Monster sprite (only one design)
-PImage monster; // current monster frame
-PImage monWalk[] = new PImage[4];
+ // Monster sprite (only one design)
+ PImage monster; // current monster frame
+ PImage monWalk[] = new PImage[4];
 
 // Scene animation
 int frontX = 0;
@@ -84,10 +81,7 @@ PImage PM_Return;
 PImage PM_Instructions;
 PImage PM_Settings;
 
-PImage B_Fore;
-PImage B_Fore_Garbage;
-PImage B_Fore_Sign;
-PImage B_Fore_Bench;
+PImage B_Fore; 
 PImage B_Back;
 PImage S_Fore;
 PImage S_Back;
@@ -107,6 +101,10 @@ PImage X_Fore;
 PImage clock1;
 PImage clock2;
 PImage clock3;
+PImage NL_1; // nightlight (purple light, okay to walk through; will kill monster)
+PImage NL_2;
+PImage ML_1; // moonlight (not okay to walk through; will kill monster and also YOU)
+PImage ML_2;
 
 // Music
 boolean play1 = false;
@@ -182,9 +180,6 @@ void setup() {
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   B_Back = loadImage("B_BACK.PNG");
   B_Fore = loadImage("B_FORE1.png");
-  B_Fore_Garbage = loadImage("B_FORE_Garbage.PNG");
-  B_Fore_Sign = loadImage("B_FORE_Sign.PNG");
-  B_Fore_Bench = loadImage("B_FORE_Bench.PNG");
 
   // School
   S_Back = loadImage("TEMP_School.png");
@@ -199,7 +194,11 @@ void setup() {
   // Xanadu
   X1 = loadImage("hallway door alone.png");
   X_Back = loadImage("X_BACK.png");
-  X_Fore = loadImage("X_FORE.PNG");
+  X_Fore = loadImage("X_FORE.png");
+  NL_1 = loadImage("nightlight1.PNG");
+  NL_2 = loadImage("nightlight2.PNG");
+  ML_1 = loadImage("moonlight1.PNG");
+  ML_2 = loadImage("moonlight2.PNG");
 
   /* if (play1 == true) {
     OS_Music.loop();
@@ -249,6 +248,7 @@ void draw() {
     play1 = false;
   }
   relativeX = abs(frontX) + mouseX;
+  
   textFont(subtitle);
   textSize(25);
   fill(39, 86, 72);
@@ -314,16 +314,6 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
-<<<<<<< Updated upstream
-    if (relativeX >= 1960 && relativeX <= 2090 && mouseY >= 460 && mouseY <= 615)
-      display(B_Fore_Bench, B_Back, 2915, 2004);
-    if (relativeX >= 1970 && relativeX <= 2080 && mouseY >= 465 && mouseY <= 615)
-      display(B_Fore_Garbage, B_Back, 2915, 2004);
-    if (relativeX >= 2090 && relativeX <= 2245 && mouseY >= 235 && mouseY <= 615)
-      display(B_Fore_Sign, B_Back, 2915, 2004);
-    else
-      display(B_Fore, B_Back, 3020, 2004);
-=======
     sceneNum = 1;
     display(B_Fore, B_Back, 3020, 2004);
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610){
@@ -339,14 +329,14 @@ void draw() {
       }
     } else if (relativeX >= 2090 && relativeX <= 2235 && mouseY >= 240 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Sign.PNG");
-  } else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610){
+    } else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Bench.PNG");
-  } else
+    } else
       B_Fore = loadImage("B_FORE1.png");
->>>>>>> Stashed changes
   }//end scene 1
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
+    sceneNum = 2;
     if (sceneChange) {
       locationX = 50;
       sceneChange = false;
@@ -372,7 +362,8 @@ void draw() {
     sceneChange = false;
   }//end scene 2
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
-  else if (scene == 2.5) {
+  else if (scene == 2.5) { 
+    sceneNum = 2.5;
     if (sceneChange) {
       locationX = 50;
       sceneChange = false;
@@ -380,22 +371,32 @@ void draw() {
     display(X1, black, 3222, 2000);
   }
   //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
-  else if (scene == 3) {
+  else if (scene == 3) { 
+    sceneNum = 3;
     if (sceneChange) {
       locationX = 50;
       sceneChange = false;
     }
     display(X_Fore, X_Back, 4330, 2454);
+    light(4330);
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  else if (scene == 4) {
-   
+  /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
+  else if (scene == 4) { // good end (you escape!)
+    
   } 
+  /////////////////////////////////////////////// end2 /////////////////////////////////////////////////
+  else if (scene == 5) { // bad end (you died O_O)
+    if ( badEnd1 ) {
+      // you got eaten by a monster lol loser
+    } else if ( badEnd2 ) {
+      // you touched the light, oops
+    }
+  }
 }
 
 
 void mousePressed() {
-  //println(mouseX + " " + mouseY);
+  println(mouseX + " " + mouseY);
   println(relativeX + " " + mouseY);
 
   if (scene == 0) {
@@ -416,7 +417,7 @@ void mousePressed() {
 
   if (scene == -2 || scene == -3 || scene == -4) { //back button
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
-      scene = 0;
+      scene = sceneNum;
   }
 
   if (scene == -4) { //Dev menu
@@ -450,9 +451,6 @@ void mousePressed() {
     if (mouseX >= 417 && mouseX <= 660 && mouseY >= 160 && mouseY <= 610) {
       scene = 3;
       locationX = 50;
-<<<<<<< Updated upstream
-      
-=======
       backX = 0;
       frontX = 0;
     }
@@ -468,7 +466,6 @@ void mousePressed() {
         scene = -3;
       else if (mouseY >= 440 && mouseY <= 535)
         scene = -2;
->>>>>>> Stashed changes
     }
   }
 }//end mousePressed
@@ -502,7 +499,6 @@ void keyPressed() {
   
   if (key == 'p') {
     scene = 2.5;
-    locationX = 179;
   }
 
   // 'e' key for interaction
@@ -666,8 +662,6 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   }
   image(pause, 20, 20, 70, 70);
 }//end display
-<<<<<<< Updated upstream
-=======
 
  void light(int foreLength) {
    image(NL_1, frontX, 0, foreLength, 800);
@@ -686,20 +680,3 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   else 
     image(ML_2, 0, 0); */
 } 
-
-/*void fadeTransition() { //weird and not right
-  if (transition == true) {
-    image(black, 0, 0, 800, 800);
-    tint(255, transparency);
-    do {
-      transparency += 5;
-      println(transparency);
-    } while (transparency<=255);
-    load = true;
-    do {
-      transparency -= 5;
-    } while (transparency>=0);
-    transition = false;
-  }
-}//end fadeTransition*/
->>>>>>> Stashed changes
