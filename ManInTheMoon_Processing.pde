@@ -134,8 +134,8 @@ void setup() {
   OS_Dev = loadImage("OS_Dev.PNG");
   OS_Music = new SoundFile(this, "ElevatorMusic.wav");
 
-  Back = loadImage("BACK_white.png");
-  Back_S = loadImage("BACK_Red.png");
+  Back = loadImage("BACK_white.PNG");
+  Back_S = loadImage("BACK_Red.PNG");
 
   Instructions = loadImage("Instructions.png");
 
@@ -154,10 +154,10 @@ void setup() {
   charWalk[2] = loadImage("CHAR_walk3R.PNG");
   charWalk[3] = loadImage("CHAR_walk4R.PNG");
 
-  charWalk[4] = loadImage("CHAR_walk1L.png");
-  charWalk[5] = loadImage("CHAR_walk2L.png");
-  charWalk[6] = loadImage("CHAR_walk3L.png");
-  charWalk[7] = loadImage("CHAR_walk4L.png");
+  charWalk[4] = loadImage("CHAR_walk1L.PNG");
+  charWalk[5] = loadImage("CHAR_walk2L.PNG");
+  charWalk[6] = loadImage("CHAR_walk3L.PNG");
+  charWalk[7] = loadImage("CHAR_walk4L.PNG");
 
   character = charWalk[0];
   
@@ -192,9 +192,9 @@ void setup() {
   clock3 = loadImage("TEMP_Settings.png");
 
   // Xanadu
-  X1 = loadImage("hallway door alone.png");
+  X1 = loadImage("hallway door alone.PNG");
   X_Back = loadImage("X_BACK.png");
-  X_Fore = loadImage("X_FORE.png");
+  X_Fore = loadImage("X_FORE.PNG");
   NL_1 = loadImage("nightlight1.PNG");
   NL_2 = loadImage("nightlight2.PNG");
   ML_1 = loadImage("moonlight1.PNG");
@@ -315,9 +315,10 @@ void draw() {
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
     sceneNum = 1;
-    display(B_Fore, B_Back, 3020, 2004);
+    display(B_Fore, B_Back, 3020, 2006);
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Garbage.PNG");
+      text("garbage", (relativeX-frontX), 440);
       if (clicked == true){
         println("yo");
         timer += 0.1;
