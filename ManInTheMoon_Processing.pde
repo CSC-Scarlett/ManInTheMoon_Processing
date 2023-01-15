@@ -251,9 +251,10 @@ void draw() {
   
   textFont(subtitle);
   textSize(25);
-  fill(39, 86, 72);
+  fill(245, 202, 122);
   //////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
   if (scene == -1) { // start screen
+    //text("ur mom", 200, 200);
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
       image(startGlow, 0, 0, 800, 800);
     else
@@ -315,7 +316,6 @@ void draw() {
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
     sceneNum = 1;
-    display(B_Fore, B_Back, 3020, 2006);
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Garbage.PNG");
       text("garbage", (relativeX-frontX), 440);
@@ -334,6 +334,7 @@ void draw() {
       B_Fore = loadImage("B_FORE_Bench.PNG");
     } else
       B_Fore = loadImage("B_FORE1.png");
+    display(B_Fore, B_Back, 3020, 2006);
   }//end scene 1
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
