@@ -620,6 +620,9 @@ void bullying() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+
+
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
   //println(relativeX);
   image(background, backX, 0, backLength, 800);
@@ -663,11 +666,15 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
       image(PM, 0, 0, 800, 800);
   }
   image(pause, 20, 20, 70, 70);
-}//end display
+} //end display
 
- void light(int foreLength) {
-   image(NL_1, frontX, 0, foreLength, 800);
-   image(ML_2, frontX, 0, foreLength, 800);
+
+
+
+
+void light(int foreLength) {
+  image(NL_1, frontX, 0, foreLength, 800);
+  image(ML_2, frontX, 0, foreLength, 800);
    
   /*
   float light1 = random(1, 10);
@@ -675,10 +682,38 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
     image(NL_1, 0, 0);
   else 
     image(NL_2, 0, 0);
-     
+       
   float light2 = random(1, 10);
   if (light1 >= 5)
     image(ML_1, 0, 0);
   else 
     image(ML_2, 0, 0); */
-} 
+    
+} //end light
+
+
+
+
+
+void transition(){
+  image(black, 0, 0, 800, 800);
+  if (transparency < 255)
+    transparency += 5;
+  else if (transparency == 255){
+    scene++;
+    
+  }
+    /*if (transition == true) {
+      image(black, 0, 0);
+      tint(255, transparency);
+      do {
+        transparency += 5;
+        println(transparency);
+      } while (transparency<=255);
+      load = true;
+      do {
+        transparency -= 5;
+      } while (transparency>=0);
+      transition = false;
+    }*/
+  } //end transition
