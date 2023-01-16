@@ -39,6 +39,7 @@ boolean sceneChange = false;
 boolean goodEnd = false;
 boolean badEnd1 = false; // Death from monster
 boolean badEnd2 = false; // Death from lights
+boolean light = true;
 
  // Monster sprite (only one design)
  PImage monster; // current monster frame
@@ -134,8 +135,8 @@ void setup() {
   OS_Dev = loadImage("OS_Dev.PNG");
   OS_Music = new SoundFile(this, "ElevatorMusic.wav");
 
-  Back = loadImage("BACK_white.PNG");
-  Back_S = loadImage("BACK_Red.PNG");
+  Back = loadImage("BACK_white.png");
+  Back_S = loadImage("BACK_Red.png");
 
   Instructions = loadImage("Instructions.png");
 
@@ -154,10 +155,10 @@ void setup() {
   charWalk[2] = loadImage("CHAR_walk3R.PNG");
   charWalk[3] = loadImage("CHAR_walk4R.PNG");
 
-  charWalk[4] = loadImage("CHAR_walk1L.PNG");
-  charWalk[5] = loadImage("CHAR_walk2L.PNG");
-  charWalk[6] = loadImage("CHAR_walk3L.PNG");
-  charWalk[7] = loadImage("CHAR_walk4L.PNG");
+  charWalk[4] = loadImage("CHAR_walk1L.png");
+  charWalk[5] = loadImage("CHAR_walk2L.png");
+  charWalk[6] = loadImage("CHAR_walk3L.png");
+  charWalk[7] = loadImage("CHAR_walk4L.png");
 
   character = charWalk[0];
   
@@ -192,9 +193,9 @@ void setup() {
   clock3 = loadImage("TEMP_Settings.png");
 
   // Xanadu
-  X1 = loadImage("hallway door alone.PNG");
+  X1 = loadImage("hallway door alone.png");
   X_Back = loadImage("X_BACK.png");
-  X_Fore = loadImage("X_FORE.PNG");
+  X_Fore = loadImage("X_FORE.png");
   NL_1 = loadImage("nightlight1.PNG");
   NL_2 = loadImage("nightlight2.PNG");
   ML_1 = loadImage("moonlight1.PNG");
@@ -380,7 +381,14 @@ void draw() {
       sceneChange = false;
     }
     display(X_Fore, X_Back, 4330, 2454);
-    light(4330);
+    
+    if (light) {
+      light(4330);
+    }
+    if (relativeX >= 1485 && relativeX <= 1714) {
+       scene = 5;
+       badEnd2 = true;
+     }
   }
   /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
   else if (scene == 4) { // good end (you escape!)
@@ -388,9 +396,12 @@ void draw() {
   } 
   /////////////////////////////////////////////// end2 /////////////////////////////////////////////////
   else if (scene == 5) { // bad end (you died O_O)
+    badEnd2 = true;
     if ( badEnd1 ) {
       // you got eaten by a monster lol loser
     } else if ( badEnd2 ) {
+      background(0);
+      text("Found you", 400, 400);
       // you touched the light, oops
     }
   }
@@ -399,7 +410,12 @@ void draw() {
 
 void mousePressed() {
   println(mouseX + " " + mouseY);
-  println(relativeX + " " + mouseY);
+  println(relativeX + " " + mouseY); 
+  
+  if (scene == 3) {
+    println(relativeX);
+    println(frontX);
+  }
 
   if (scene == 0) {
     if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305) //Start
@@ -432,7 +448,7 @@ void mousePressed() {
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 450 && mouseY <= 510)
       scene = 3;
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 540 && mouseY <= 600)
-      scene = 4;
+      scene = 5;
   }
   if (scene >= 1){
     if (mouseX >= 20 && mouseX <= 90 && mouseY >= 20 && mouseY <= 90){ //pause button
@@ -675,6 +691,7 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
 void light(int foreLength) {
   image(NL_1, frontX, 0, foreLength, 800);
   image(ML_2, frontX, 0, foreLength, 800);
+  
    
   /*
   float light1 = random(1, 10);
