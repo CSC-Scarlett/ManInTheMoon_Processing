@@ -28,7 +28,12 @@ boolean crouching = false;
 boolean move = false;
 boolean bully = false;
 boolean facingRight = true;
-boolean clicked = false;
+boolean clicked1 = false;
+boolean clicked2 = false;
+boolean clicked3 = false;
+boolean clickedT1 = false;
+boolean clickedT2 = false;
+boolean text2half = false;
 
 // Game Mechanics
 float timer = 0;
@@ -39,6 +44,7 @@ boolean sceneChange = false;
 boolean goodEnd = false;
 boolean badEnd1 = false; // Death from monster
 boolean badEnd2 = false; // Death from lights
+boolean light = true;
 
  // Monster sprite (only one design)
  PImage monster; // current monster frame
@@ -251,9 +257,10 @@ void draw() {
   
   textFont(subtitle);
   textSize(25);
-  fill(39, 86, 72);
+  fill(245, 202, 122);
   //////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
   if (scene == -1) { // start screen
+    //text("ur mom", 200, 200);
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
       image(startGlow, 0, 0, 800, 800);
     else
@@ -315,24 +322,63 @@ void draw() {
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
     sceneNum = 1;
-    display(B_Fore, B_Back, 3020, 2004);
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Garbage.PNG");
-      if (clicked == true){
-        println("yo");
-        timer += 0.1;
-        text("dorothy", 250, 740);
-        if (timer == 5){
-          timer = 0;
-          clicked = false;
-        }
-      }
+      text("garbage", (relativeX-frontX), 440);
     } else if (relativeX >= 2090 && relativeX <= 2235 && mouseY >= 240 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Sign.PNG");
     } else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Bench.PNG");
     } else
       B_Fore = loadImage("B_FORE1.png");
+    display(B_Fore, B_Back, 3020, 2006);
+    if (clicked1 == true){
+       timer += 0.1;
+       text("you", 250, 740);
+       if (timer >= 3){
+         timer = 0;
+         clicked1 = false;
+       }
+     }
+     if (clicked2 == true) {
+       timer += 0.1;
+       text("wait for the bus!", 250, 740);
+       if (timer >= 5) {
+         timer = 0;
+         clicked2 = false;
+       }
+     }
+     if (clicked3 == true) {
+       timer += 0.1;
+       text("you're now waiting!", 250, 740);
+       if (timer >= 5) {
+         timer = -0.5;
+         clicked3 = false;
+         clickedT1 = true;
+       }
+     }
+     if (clickedT1 == true) {
+       timer += 0.1;
+       text("the bus is here!", 250, 740);
+       if (timer >= 4) {
+         timer = -0.5;
+         clickedT1 = false;
+         clickedT2 = true;
+       }
+     }
+     if (clickedT2 == true) {
+       timer += 0.1;
+       text("it looks a bit strange though...", 250, 740);
+       if (timer >= 4) {
+         timer = -0.5;
+         clickedT2 = false;
+         text2half = true;
+         scene = 2.5;
+         backX = 0;
+         frontX = 0;
+         locationX = 50;
+       }
+     } 
   }//end scene 1
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
   else if (scene == 2) {
@@ -369,6 +415,12 @@ void draw() {
       sceneChange = false;
     }
     display(X1, black, 3222, 2000);
+    if (text2half == true) {
+      text("oh no! where are you?", 240, 740);
+      if (scene == 3) {
+        text2half = false;
+      }
+    }
   }
   //////////////////////////////////////////////// xanadu ////////////////////////////////////////////////
   else if (scene == 3) { 
@@ -378,7 +430,13 @@ void draw() {
       sceneChange = false;
     }
     display(X_Fore, X_Back, 4330, 2454);
-    light(4330);
+    timer += 0.1;
+    if (light) {
+      light(4330);
+      /* if (relativeX >= 1498 && relativeX <= 1714) {
+        scene = 5;
+      } */
+    }
   }
   /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
   else if (scene == 4) { // good end (you escape!)
@@ -386,18 +444,20 @@ void draw() {
   } 
   /////////////////////////////////////////////// end2 /////////////////////////////////////////////////
   else if (scene == 5) { // bad end (you died O_O)
-    if ( badEnd1 ) {
-      // you got eaten by a monster lol loser
-    } else if ( badEnd2 ) {
-      // you touched the light, oops
-    }
+    text();
   }
 }
 
 
+
 void mousePressed() {
   println(mouseX + " " + mouseY);
-  println(relativeX + " " + mouseY);
+  println(relativeX + " " + mouseY); 
+  
+  if (scene == 3) {
+    println(relativeX);
+    println(frontX);
+  }
 
   if (scene == 0) {
     if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305) //Start
@@ -430,7 +490,7 @@ void mousePressed() {
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 450 && mouseY <= 510)
       scene = 3;
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 540 && mouseY <= 600)
-      scene = 4;
+      scene = 5;
   }
   if (scene >= 1){
     if (mouseX >= 20 && mouseX <= 90 && mouseY >= 20 && mouseY <= 90){ //pause button
@@ -440,11 +500,11 @@ void mousePressed() {
   
   if (scene == 1){
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610)
-      clicked = true;
+      clicked1 = true;
     else if (relativeX >= 2090 && relativeX <= 2235 && mouseY >= 240 && mouseY <= 610)
-      clicked = true;
+      clicked2 = true;
     else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610)
-      clicked = true;
+      clicked3 = true;
   }
   
   if (scene == 2.5) {
@@ -460,6 +520,9 @@ void mousePressed() {
     if (mouseX >= 235 && mouseX <= 545){
       if (mouseY >= 195 && mouseY <= 285){
         scene = 0;
+        backX = 0;
+        frontX = 0;
+        locationX = 50;
         paused = false;
       }
       else if (mouseY >= 320 && mouseY <= 410)
@@ -618,6 +681,9 @@ void bullying() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+
+
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
   //println(relativeX);
   image(background, backX, 0, backLength, 800);
@@ -661,22 +727,101 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
       image(PM, 0, 0, 800, 800);
   }
   image(pause, 20, 20, 70, 70);
-}//end display
+} //end display
 
- void light(int foreLength) {
-   image(NL_1, frontX, 0, foreLength, 800);
-   image(ML_2, frontX, 0, foreLength, 800);
-   
-  /*
-  float light1 = random(1, 10);
+
+
+
+
+void light(int foreLength) {
+  boolean NL1 = false;
+  boolean NL2 = false;
+  boolean ML1 = false;
+  boolean ML2 = false;
+  
+  float random1 = random(1,10);
+  if (random1 <= 5) {
+    NL1 = true;
+  }
+  
+  int lights[] = {0, 1, 2, 3, 4, 5};
+  int random = (int)random(lights.length);
+  println(lights[random]);
+  
+  if (lights[random] <= 1) {
+    ML2 = true;
+  } else if (lights[random] > 1 && lights[random] <= 3) {
+    NL2 = true;
+  }
+  
+  if (NL1) 
+    image(NL_1, frontX, 0, foreLength, 800);
+  if (NL2) 
+    image(NL_2, frontX, 0, foreLength, 800);
+  if (ML1) 
+    image(ML_1, frontX, 0, foreLength, 800);
+  if (ML2) 
+    image(ML_2, frontX, 0, foreLength, 800);
+     
+  
+  /* float light1 = random(1, 10);
   if (light1 >= 5)
     image(NL_1, 0, 0);
   else 
     image(NL_2, 0, 0);
-     
+       
   float light2 = random(1, 10);
-  if (light1 >= 5)
+  if (light2 >= 5)
     image(ML_1, 0, 0);
   else 
     image(ML_2, 0, 0); */
-} 
+    
+} //end light
+
+void text() {
+  float textNum = random(1,5);
+  background(0);
+  if (textNum <= 1) {
+    text("found you.", 400, 400);
+    println("1");
+  } else if (textNum <= 2 && textNum > 1) {
+    text("he saw you", 400, 400);
+    println("2");
+  } else if (textNum <= 3 && textNum > 2) {
+    text("i see you.", 400, 400);
+    println("3");
+  } else if (textNum <= 4 && textNum > 3) {
+    text("you can't hide", 400, 400);
+    println("4");
+  } else if (textNum <= 5 && textNum > 4) {
+    text("run.", 400, 400);
+    println("5");
+  }
+  noLoop();
+  
+}
+
+
+
+void transition(){
+  image(black, 0, 0, 800, 800);
+  if (transparency < 255)
+    transparency += 5;
+  else if (transparency == 255){
+    scene++;
+    
+  }
+    /*if (transition == true) {
+      image(black, 0, 0);
+      tint(255, transparency);
+      do {
+        transparency += 5;
+        println(transparency);
+      } while (transparency<=255);
+      load = true;
+      do {
+        transparency -= 5;
+      } while (transparency>=0);
+      transition = false;
+    }*/
+  } //end transition
