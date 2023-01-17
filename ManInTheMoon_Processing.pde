@@ -352,7 +352,7 @@ void draw() {
        timer += 0.1;
        text("you're now waiting!", 250, 740);
        if (timer >= 5) {
-         timer = 0;
+         timer = -0.5;
          clicked3 = false;
          clickedT1 = true;
        }
@@ -361,7 +361,7 @@ void draw() {
        timer += 0.1;
        text("the bus is here!", 250, 740);
        if (timer >= 4) {
-         timer = 0;
+         timer = -0.5;
          clickedT1 = false;
          clickedT2 = true;
        }
@@ -370,7 +370,7 @@ void draw() {
        timer += 0.1;
        text("it looks a bit strange though...", 250, 740);
        if (timer >= 4) {
-         timer = 0;
+         timer = -0.5;
          clickedT2 = false;
          text2half = true;
          scene = 2.5;
@@ -430,13 +430,13 @@ void draw() {
       sceneChange = false;
     }
     display(X_Fore, X_Back, 4330, 2454);
-    
+    timer += 0.1;
     if (light) {
       light(4330);
+      /* if (relativeX >= 1498 && relativeX <= 1714) {
+        scene = 5;
+      } */
     }
-    if (relativeX >= 1485 && relativeX <= 1714) {
-       scene = 5;
-     }
   }
   /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
   else if (scene == 4) { // good end (you escape!)
@@ -734,8 +734,35 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
 
 
 void light(int foreLength) {
-  image(NL_1, frontX, 0, foreLength, 800);
-  image(ML_2, frontX, 0, foreLength, 800);
+  boolean NL1 = false;
+  boolean NL2 = false;
+  boolean ML1 = false;
+  boolean ML2 = false;
+  
+  float random1 = random(1,10);
+  if (random1 <= 5) {
+    NL1 = true;
+  }
+  
+  int lights[] = {0, 1, 2, 3, 4, 5};
+  int random = (int)random(lights.length);
+  println(lights[random]);
+  
+  if (lights[random] <= 1) {
+    ML2 = true;
+  } else if (lights[random] > 1 && lights[random] <= 3) {
+    NL2 = true;
+  }
+  
+  if (NL1) 
+    image(NL_1, frontX, 0, foreLength, 800);
+  if (NL2) 
+    image(NL_2, frontX, 0, foreLength, 800);
+  if (ML1) 
+    image(ML_1, frontX, 0, foreLength, 800);
+  if (ML2) 
+    image(ML_2, frontX, 0, foreLength, 800);
+     
   
   /* float light1 = random(1, 10);
   if (light1 >= 5)
@@ -755,19 +782,19 @@ void text() {
   float textNum = random(1,5);
   background(0);
   if (textNum <= 1) {
-    text("Found you.", 400, 400);
+    text("found you.", 400, 400);
     println("1");
   } else if (textNum <= 2 && textNum > 1) {
-    text("He saw you", 400, 400);
+    text("he saw you", 400, 400);
     println("2");
   } else if (textNum <= 3 && textNum > 2) {
-    text("You failed.", 400, 400);
+    text("i see you.", 400, 400);
     println("3");
   } else if (textNum <= 4 && textNum > 3) {
-    text("You can't hide", 400, 400);
+    text("you can't hide", 400, 400);
     println("4");
   } else if (textNum <= 5 && textNum > 4) {
-    text("Run.", 400, 400);
+    text("run.", 400, 400);
     println("5");
   }
   noLoop();
