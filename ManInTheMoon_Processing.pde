@@ -8,7 +8,7 @@ import processing.sound.*; // sound library import
 float scene = -1;
 float sceneNum = 0;
 boolean playing = true;
-int loadScene = -1;
+float loadScene = -1;
 
 //aesthetics :)))))))))))))))))))))))))))))))))))))))))000
 PFont subtitle;
@@ -319,7 +319,7 @@ void draw() {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy
     if (clicked1 == true){
        timer += 0.1;
-       text("you", 250, 740);
+       text("stinky", 250, 740);
        if (timer >= 3){
          timer = 0;
          clicked1 = false;
@@ -466,7 +466,7 @@ void mousePressed() {
 
   if (scene == -2 || scene == -3 || scene == -4) { //back button
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
-      scene = sceneNum;
+      loadScene = sceneNum;
   }
 
   if (scene == -4) { //Dev menu
@@ -792,7 +792,7 @@ void text() {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
-void transition(int nextScene){
+void transition(float nextScene){
   if (loadScene != -100){
     do{
       if (transparency < 255 && fadeIn == false){
@@ -811,6 +811,7 @@ void transition(int nextScene){
         transparency = 0;
         fadeIn = false;
         loadScene = -100;
+        println("end");
       }
     }while(transparency != 0 && fadeIn == false);
     tint(255, transparency);
