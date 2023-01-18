@@ -7,6 +7,8 @@ import processing.sound.*; // sound library import
 // Scene control
 float scene = -1;
 float sceneNum = 0;
+boolean playing = true;
+int loadScene = -1;
 
 //aesthetics :)))))))))))))))))))))))))))))))))))))))))000
 PFont subtitle;
@@ -34,6 +36,7 @@ boolean clicked3 = false;
 boolean clickedT1 = false;
 boolean clickedT2 = false;
 boolean text2half = false;
+boolean clicked[] = new boolean[5];
 
 // Game Mechanics
 float timer = 0;
@@ -44,7 +47,9 @@ boolean sceneChange = false;
 boolean goodEnd = false;
 boolean badEnd1 = false; // Death from monster
 boolean badEnd2 = false; // Death from lights
+boolean ending[] = new boolean[2];
 boolean light = true;
+boolean fadeIn = false;
 
  // Monster sprite (only one design)
  PImage monster; // current monster frame
@@ -62,6 +67,8 @@ PImage OS_Start;
 PImage OS_Settings;
 PImage OS_Instruct;
 PImage OS_Dev;
+PImage OS_Quit;
+PImage OS1[] = new PImage[6];
 
 PImage startWhite;
 PImage startGlow;
@@ -69,8 +76,12 @@ PImage startGlow;
 PImage Back;
 PImage Back_S;
 
+PImage pause;
+PImage pause_S;
+
 PImage Instructions;
 PImage Settings;
+
 PImage Dev;
 PImage Dev_Start;
 PImage Dev_S1;
@@ -79,13 +90,12 @@ PImage Dev_S3;
 PImage Dev_End;
 
 //Pause menu
-PImage pause;
-PImage pause_S;
 PImage black;
 PImage PM;
 PImage PM_Return;
 PImage PM_Instructions;
 PImage PM_Settings;
+PImage PM1[] = new PImage[4];
 
 PImage B_Fore; 
 PImage B_Back;
@@ -96,6 +106,8 @@ PImage H_Back;
 PImage X1;
 PImage X_Back;
 PImage X_Fore;
+PImage fore[] = new PImage[4];
+PImage back[] = new PImage[4];
 
 /*
 // Props
@@ -138,10 +150,11 @@ void setup() {
   OS_Settings = loadImage("OS_Settings.PNG");
   OS_Instruct = loadImage("OS_Instruct.PNG");
   OS_Dev = loadImage("OS_Dev.PNG");
+  OS_Quit = loadImage("OS_Quit.PNG");
   OS_Music = new SoundFile(this, "ElevatorMusic.wav");
 
-  Back = loadImage("BACK_white.png");
-  Back_S = loadImage("BACK_Red.png");
+  Back = loadImage("BACK_white.PNG");
+  Back_S = loadImage("BACK_Red.PNG");
 
   Instructions = loadImage("Instructions.png");
 
@@ -160,10 +173,10 @@ void setup() {
   charWalk[2] = loadImage("CHAR_walk3R.PNG");
   charWalk[3] = loadImage("CHAR_walk4R.PNG");
 
-  charWalk[4] = loadImage("CHAR_walk1L.png");
-  charWalk[5] = loadImage("CHAR_walk2L.png");
-  charWalk[6] = loadImage("CHAR_walk3L.png");
-  charWalk[7] = loadImage("CHAR_walk4L.png");
+  charWalk[4] = loadImage("CHAR_walk1L.PNG");
+  charWalk[5] = loadImage("CHAR_walk2L.PNG");
+  charWalk[6] = loadImage("CHAR_walk3L.PNG");
+  charWalk[7] = loadImage("CHAR_walk4L.PNG");
 
   character = charWalk[0];
   
@@ -198,9 +211,9 @@ void setup() {
   clock3 = loadImage("TEMP_Settings.png");
 
   // Xanadu
-  X1 = loadImage("hallway door alone.png");
+  X1 = loadImage("hallway door alone.PNG");
   X_Back = loadImage("X_BACK.png");
-  X_Fore = loadImage("X_FORE.png");
+  X_Fore = loadImage("X_FORE.PNG");
   NL_1 = loadImage("nightlight1.PNG");
   NL_2 = loadImage("nightlight2.PNG");
   ML_1 = loadImage("moonlight1.PNG");
@@ -212,55 +225,22 @@ void setup() {
   } */
 } //end setup
 
-/* if (game == true) {
- if (v <= 1 && v>0) {
- lobbyMusic.amp(v);
- v -= 0.1;
- } if (v <= 0) {
- lobbyMusic.stop();
- v = 1.0;
- gameMusic.amp(v);
- gameMusic.loop();
- //}
- game = false;
- }
- if (game == false && lobby == false) {
- if (v<= 1 && v>0) {
- gameMusic.amp(v);
- v -= 0.1;
- } else if (v <= 0) {
- gameMusic.stop();
- v = 1.0;
- }
- }
- 
- if (gameStop == true) {
- if (v>0 && v <= 1.0) {
- gameMusic.amp(v);
- v -= 0.01;
- }
- if (v <= 0.0) {
- gameMusic.stop();
- gameStop = false;
- }
- }*/
-
 
 void draw() {
-  play1 = true;
+  /*play1 = true;
   if (play1) {
     OS_Music.play();
     OS_Music.loop();
     play1 = false;
-  }
+  }*/
   relativeX = abs(frontX) + mouseX;
   
   textFont(subtitle);
   textSize(25);
   fill(245, 202, 122);
+  
   //////////////////////////////////////////////// scene -1 ////////////////////////////////////////////////
   if (scene == -1) { // start screen
-    //text("ur mom", 200, 200);
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
       image(startGlow, 0, 0, 800, 800);
     else
@@ -276,6 +256,8 @@ void draw() {
       image(OS_Instruct, 0, 0, 800, 800);
     else if (mouseX >= 475 && mouseX <= 565 && mouseY >= 395 && mouseY <= 425)
       image(OS_Dev, 0, 0, 800, 800);
+    else if (mouseX >= 475 && mouseX <= 530 && mouseY >= 435 && mouseY <= 470)
+        image(OS_Quit, 0, 0, 800, 800);
     else
       image(OS, 0, 0, 800, 800);
   }
@@ -321,6 +303,7 @@ void draw() {
   }
   /////////////////////////////////////////////// bus stop /////////////////////////////////////////////////
   else if (scene == 1) {
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
     sceneNum = 1;
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610){
       B_Fore = loadImage("B_FORE_Garbage.PNG");
@@ -332,6 +315,8 @@ void draw() {
     } else
       B_Fore = loadImage("B_FORE1.png");
     display(B_Fore, B_Back, 3020, 2006);
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy
     if (clicked1 == true){
        timer += 0.1;
        text("you", 250, 740);
@@ -407,6 +392,7 @@ void draw() {
     }// end else
     sceneChange = false;
   }//end scene 2
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
   else if (scene == 2.5) { 
     sceneNum = 2.5;
@@ -446,7 +432,8 @@ void draw() {
   else if (scene == 5) { // bad end (you died O_O)
     text();
   }
-}
+  transition(loadScene);
+}//end draw
 
 
 
@@ -461,18 +448,18 @@ void mousePressed() {
 
   if (scene == 0) {
     if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305) //Start
-      scene = 1;
+      loadScene = 1;
     else if (mouseX >= 475 && mouseX <= 550 && mouseY >= 310 && mouseY <= 345) // Settings
-      scene = -2;
+      loadScene = -2;
     else if (mouseX >= 475 && mouseX <= 580 && mouseY >= 360 && mouseY <= 390) // Instructions
-      scene = -3;
+      loadScene = -3;
     else if (mouseX >= 475 && mouseX <= 565 && mouseY >= 395 && mouseY <= 425) // Developer mode
-      scene = -4;
+      loadScene = -4;
   } // end loadingScreen mousePressed
 
   if (scene == -1) { //start button
     if (mouseX >= 540 && mouseX <= 730 && mouseY >= 650 && mouseY <= 730)
-      scene = 0;
+      loadScene = 0;
   } // end startScreen
 
   if (scene == -2 || scene == -3 || scene == -4) { //back button
@@ -482,15 +469,15 @@ void mousePressed() {
 
   if (scene == -4) { //Dev menu
     if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280)
-      scene = -1;
+      loadScene = -1;
     else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355)
-      scene = 1;
+      loadScene = 1;
     else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435)
-      scene = 2;
+      loadScene = 2;
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 450 && mouseY <= 510)
-      scene = 3;
+      loadScene = 3;
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 540 && mouseY <= 600)
-      scene = 5;
+      loadScene = 5;
   }
   if (scene >= 1){
     if (mouseX >= 20 && mouseX <= 90 && mouseY >= 20 && mouseY <= 90){ //pause button
@@ -509,7 +496,7 @@ void mousePressed() {
   
   if (scene == 2.5) {
     if (mouseX >= 417 && mouseX <= 660 && mouseY >= 160 && mouseY <= 610) {
-      scene = 3;
+      loadScene = 3;
       locationX = 50;
       backX = 0;
       frontX = 0;
@@ -519,16 +506,16 @@ void mousePressed() {
   if (paused) {
     if (mouseX >= 235 && mouseX <= 545){
       if (mouseY >= 195 && mouseY <= 285){
-        scene = 0;
+        loadScene = 0;
         backX = 0;
         frontX = 0;
         locationX = 50;
         paused = false;
       }
       else if (mouseY >= 320 && mouseY <= 410)
-        scene = -3;
+        loadScene = -3;
       else if (mouseY >= 440 && mouseY <= 535)
-        scene = -2;
+        loadScene = -2;
     }
   }
 }//end mousePressed
@@ -579,7 +566,7 @@ void keyReleased() {
 ///////////////////////////////////////////////// Movement /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
 void walking() {
   if (facingRight == true) {
     switch(frame) {
@@ -671,7 +658,7 @@ void moving() {
   //crouching();
   jumping();
 }//end moving
-
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 void bullying() {
 } //end bullying! 👨
@@ -683,7 +670,7 @@ void bullying() {
 
 
 
-
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
   //println(relativeX);
   image(background, backX, 0, backLength, 800);
@@ -728,11 +715,11 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
   }
   image(pause, 20, 20, 70, 70);
 } //end display
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
-
-
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy
 void light(int foreLength) {
   boolean NL1 = false;
   boolean NL2 = false;
@@ -800,17 +787,30 @@ void text() {
   noLoop();
   
 }
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
-
-void transition(){
-  image(black, 0, 0, 800, 800);
-  if (transparency < 255)
-    transparency += 5;
-  else if (transparency == 255){
-    scene++;
-    
-  }
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
+void transition(int nextScene){
+  if (loadScene != -100){
+    do{
+      tint(255, transparency);
+      image(black, 0, 0, 800, 800);
+      tint(255, 255);
+      if (transparency < 255 && fadeIn == false)
+        transparency += 5;
+      else if (transparency == 255){
+        scene = nextScene;
+        fadeIn = true;
+      }
+      if (transparency > 0 && fadeIn == true)
+        transparency -= 5;
+      if (transparency == 0 && fadeIn == true){
+        transparency = 0;
+        fadeIn = false;
+        loadScene = -100;
+      }
+    }while(transparency != 0 && fadeIn == false);
+  }//end big if
     /*if (transition == true) {
       image(black, 0, 0);
       tint(255, transparency);
@@ -825,3 +825,5 @@ void transition(){
       transition = false;
     }*/
   } //end transition
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
