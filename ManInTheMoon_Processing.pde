@@ -7,68 +7,94 @@ import processing.sound.*; // sound library import
 // Scene control
 float scene = -1;
 float sceneNum = 0;
-boolean playing = true;
 float loadScene = -1;
 
-//aesthetics :)))))))))))))))))))))))))))))))))))))))))000
+// Aesthetics
 PFont subtitle;
+PImage black;
 
 // Chang'e animation sprites
 PImage character; //current Chang'e frame
 PImage charWalk[] = new PImage[8]; //0 and 4 stationary, 0-3 right facing, 4-7 left facing
-// PImage charCrouch[] = new PImage[4];
-// PImage charJump[] = new PImage[];
 
+// Monster sprite (only one design)
+PImage monster; // current monster frame
+PImage monWalk[] = new PImage[4]; //0-1 right facing, 1-2 left facing
 
-//movement control
+// Sprite control
+boolean jumping = false;
+boolean move = false;
+//boolean bully = false;
+boolean facingRight = true;
 int locationX = 50;
 int locationY = 400;
 int speedY = 0;
 int frame = 0;
-boolean jumping = false;
-boolean crouching = false;
-boolean move = false;
-boolean bully = false;
-boolean facingRight = true;
-boolean clicked1 = false;
-boolean clicked2 = false;
-boolean clicked3 = false;
-boolean clickedT1 = false;
-boolean clickedT2 = false;
+
+// Environment animation
 boolean text2half = false;
-boolean clicked[] = new boolean[5];
-
-// Game Mechanics
-float timer = 0;
-boolean clock = false;
-boolean inSchool = false;
-boolean paused = false;
-boolean sceneChange = false;
-boolean goodEnd = false;
-boolean badEnd1 = false; // Death from monster
-boolean badEnd2 = false; // Death from lights
-boolean ending[] = new boolean[2];
-boolean light = true;
-boolean fadeIn = false;
-
- // Monster sprite (only one design)
- PImage monster; // current monster frame
- PImage monWalk[] = new PImage[4];
-
-// Scene animation
+boolean clicked[] = {false, false, false, false, false};
 int frontX = 0;
 int backX = 0;
 int relativeX;
 int transparency = 0;
 
+// Game logic
+float timer = 0;
+boolean clock = false;
+boolean inSchool = false;
+boolean paused = false;
+boolean sceneChange = false;
+boolean ending[] = {false, false, false}; //0 is good ending, 1 is death from monster, 2 is death from lights
+boolean light = true;
+boolean fadeIn = false;
+
 // Backgrounds
-PImage OS;
-PImage OS_Start;
-PImage OS_Settings;
-PImage OS_Instruct;
-PImage OS_Dev;
-PImage OS_Quit;
-PImage OS1[] = new PImage[6];
+PImage OS[] = new PImage[6]; //opening screen
+/*
+0: neutral
+1: Start
+2: Settings
+3: Instructions
+4: Developer
+5: Quit
+*/
+
+PImage Dev[] = new PImage[6]; //developer menu
+/*
+0: neutral
+1: START
+2: Scene 1 (bus stop)
+3: Scene 2 (school WIP)
+4: Scene 3 (xanadu)
+5: END
+*/
+
+PImage PM[] = new PImage[4]; //pause menu
+/*
+0: neutral
+1: Return to menu
+2: Instructions
+3: Settings
+*/
+
+PImage fore[] = new PImage[5]; //foreground
+PImage back[] = new PImage[5]; //background
+/*
+0: bus stop
+1: school
+2: school hallway
+3: dark hallway
+4: xanadu
+*/
+
+PImage lights[] = new PImage[4];
+/*
+0: nightlight 1 (purple light, okay to walk through; will kill monster)
+1: nightlight 2
+2: moonlight 1 (not okay to walk through; will kill monster and also YOU)
+3: moonlight 2
+*/
 
 PImage startWhite;
 PImage startGlow;
@@ -82,51 +108,19 @@ PImage pause_S;
 PImage Instructions;
 PImage Settings;
 
-PImage Dev;
-PImage Dev_Start;
-PImage Dev_S1;
-PImage Dev_S2;
-PImage Dev_S3;
-PImage Dev_End;
 
-//Pause menu
-PImage black;
-PImage PM;
-PImage PM_Return;
-PImage PM_Instructions;
-PImage PM_Settings;
-PImage PM1[] = new PImage[4];
-
-PImage B_Fore; 
-PImage B_Back;
-PImage S_Fore;
-PImage S_Back;
-PImage H_Fore;
-PImage H_Back;
-PImage X1;
-PImage X_Back;
-PImage X_Fore;
-PImage fore[] = new PImage[4];
-PImage back[] = new PImage[4];
-
-/*
 // Props
- PImage note;
- PImage bus;
- PImage door1;
- PImage door2;
- */
 PImage clock1;
 PImage clock2;
 PImage clock3;
-PImage NL_1; // nightlight (purple light, okay to walk through; will kill monster)
-PImage NL_2;
-PImage ML_1; // moonlight (not okay to walk through; will kill monster and also YOU)
-PImage ML_2;
+//PImage note;
+//PImage bus;
+//PImage door1;
+//PImage door2;
 
 // Music
-boolean play1 = false;
-SoundFile OS_Music;
+//boolean play1 = false;
+//SoundFile OS_Music;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////// Prelims /////////////////////////////////////////////////////
@@ -145,13 +139,13 @@ void setup() {
   startGlow = loadImage("START_Glow.png");
 
   // Opening screen
-  OS = loadImage("OS.PNG");
-  OS_Start = loadImage("OS_Start.PNG");
-  OS_Settings = loadImage("OS_Settings.PNG");
-  OS_Instruct = loadImage("OS_Instruct.PNG");
-  OS_Dev = loadImage("OS_Dev.PNG");
-  OS_Quit = loadImage("OS_Quit.PNG");
-  OS_Music = new SoundFile(this, "ElevatorMusic.wav");
+  OS[0] = loadImage("OS.PNG");
+  OS[1] = loadImage("OS_Start.PNG");
+  OS[2] = loadImage("OS_Settings.PNG");
+  OS[3] = loadImage("OS_Instruct.PNG");
+  OS[4] = loadImage("OS_Dev.PNG");
+  OS[5] = loadImage("OS_Quit.PNG");
+  //OS_Music = new SoundFile(this, "ElevatorMusic.wav");
 
   Back = loadImage("BACK_white.PNG");
   Back_S = loadImage("BACK_Red.PNG");
@@ -160,64 +154,61 @@ void setup() {
 
   Settings = loadImage("Settings.png");
 
-  Dev = loadImage("DEV.png");
-  Dev_Start = loadImage("DEV_Start.png");
-  Dev_S1 = loadImage("DEV_S1.png");
-  Dev_S2 = loadImage("DEV_S2.png");
-  Dev_S3 = loadImage("DEV_S3.png");
-  Dev_End = loadImage("DEV_End.png");
+  Dev[0] = loadImage("DEV.png");
+  Dev[1] = loadImage("DEV_Start.png");
+  Dev[2] = loadImage("DEV_S1.png");
+  Dev[3] = loadImage("DEV_S2.png");
+  Dev[4] = loadImage("DEV_S3.png");
+  Dev[5] = loadImage("DEV_End.png");
 
   // Character Animation
   charWalk[0] = loadImage("CHAR_walk1R.PNG");
   charWalk[1] = loadImage("CHAR_walk2R.PNG");
   charWalk[2] = loadImage("CHAR_walk3R.PNG");
   charWalk[3] = loadImage("CHAR_walk4R.PNG");
-
   charWalk[4] = loadImage("CHAR_walk1L.PNG");
   charWalk[5] = loadImage("CHAR_walk2L.PNG");
   charWalk[6] = loadImage("CHAR_walk3L.PNG");
   charWalk[7] = loadImage("CHAR_walk4L.PNG");
-
   character = charWalk[0];
   
   // Monster Animation
   monWalk[0] = loadImage("TEMP_Settings.png");
   monWalk[1] = loadImage("TEMP_Dev.png");
-  
   monWalk[2] = loadImage("TEMP_Settings.png");
   monWalk[3] = loadImage("TEMP_Dev.png");
-  
   monster = monWalk[0];
   
   pause = loadImage("Pause.PNG");
   black = loadImage("black.PNG");
-  PM = loadImage("PM.PNG");
-  PM_Return = loadImage("PM_Return.PNG");
-  PM_Instructions = loadImage("PM_Instructions.PNG");
-  PM_Settings = loadImage("PM_Settings.PNG");
+  PM[0] = loadImage("PM.PNG");
+  PM[1] = loadImage("PM_Return.PNG");
+  PM[2] = loadImage("PM_Instructions.PNG");
+  PM[3] = loadImage("PM_Settings.PNG");
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-  B_Back = loadImage("B_BACK.PNG");
-  B_Fore = loadImage("B_FORE1.png");
+  back[0] = loadImage("B_BACK.PNG");
+  fore[0] = loadImage("B_FORE1.png");
 
   // School
-  S_Back = loadImage("TEMP_School.png");
-  S_Fore = loadImage("TEMP_School.png");
-  H_Back = loadImage("TEMP_Hallway.png");
-  H_Fore = loadImage("TEMP_Hallway.png");
+  back[1] = loadImage("TEMP_School.png");
+  fore[1] = loadImage("TEMP_School.png");
+  back[2] = loadImage("TEMP_Hallway.png");
+  fore[2] = loadImage("TEMP_Hallway.png");
   
   clock1 = loadImage("clock full.png");
   clock2 = loadImage("TEMP_Settings.png");
   clock3 = loadImage("TEMP_Settings.png");
 
   // Xanadu
-  X1 = loadImage("hallway door alone.PNG");
-  X_Back = loadImage("X_BACK.png");
-  X_Fore = loadImage("X_FORE.PNG");
-  NL_1 = loadImage("nightlight1.PNG");
-  NL_2 = loadImage("nightlight2.PNG");
-  ML_1 = loadImage("moonlight1.PNG");
-  ML_2 = loadImage("moonlight2.PNG");
+  fore[3] = loadImage("hallway door alone.PNG");
+  back[3] = loadImage("black.PNG");
+  back[4] = loadImage("X_BACK.png");
+  fore[4] = loadImage("X_FORE.PNG");
+  lights[0] = loadImage("nightlight1.PNG");
+  lights[1] = loadImage("nightlight2.PNG");
+  lights[2] = loadImage("moonlight1.PNG");
+  lights[3] = loadImage("moonlight2.PNG");
 
   /* if (play1 == true) {
     OS_Music.loop();
@@ -249,17 +240,17 @@ void draw() {
   //////////////////////////////////////////////// scene 0 ////////////////////////////////////////////////
   else if (scene == 0) { // OS screen
     if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305)
-      image(OS_Start, 0, 0, 800, 800);
+      image(OS[1], 0, 0, 800, 800);
     else if (mouseX >= 475 && mouseX <= 550 && mouseY >= 310 && mouseY <= 345)
-      image(OS_Settings, 0, 0, 800, 800);
+      image(OS[2], 0, 0, 800, 800);
     else if (mouseX >= 475 && mouseX <= 580 && mouseY >= 360 && mouseY <= 390)
-      image(OS_Instruct, 0, 0, 800, 800);
+      image(OS[3], 0, 0, 800, 800);
     else if (mouseX >= 475 && mouseX <= 565 && mouseY >= 395 && mouseY <= 425)
-      image(OS_Dev, 0, 0, 800, 800);
+      image(OS[4], 0, 0, 800, 800);
     else if (mouseX >= 475 && mouseX <= 530 && mouseY >= 435 && mouseY <= 470)
-        image(OS_Quit, 0, 0, 800, 800);
+        image(OS[5], 0, 0, 800, 800);
     else
-      image(OS, 0, 0, 800, 800);
+      image(OS[0], 0, 0, 800, 800);
   }
   //////////////////////////////////////////////// scene -2 ////////////////////////////////////////////////
   else if (scene == -2) { // game settings
@@ -281,19 +272,18 @@ void draw() {
   }
   //////////////////////////////////////////////// scene -4 ////////////////////////////////////////////////
   else if (scene == -4) { // Dev menu
-    image(Dev, 0, 0, 800, 800);
     if (mouseX >= 130 && mouseX <= 335 && mouseY >= 210 && mouseY <= 280)
-      image(Dev_Start, 0, 0, 800, 800);
+      image(Dev[1], 0, 0, 800, 800);
     else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355)
-      image(Dev_S1, 0, 0, 800, 800);
+      image(Dev[2], 0, 0, 800, 800);
     else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435)
-      image(Dev_S2, 0, 0, 800, 800);
+      image(Dev[3], 0, 0, 800, 800);
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 450 && mouseY <= 510)
-      image(Dev_S3, 0, 0, 800, 800);
+      image(Dev[4], 0, 0, 800, 800);
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 540 && mouseY <= 600)
-      image(Dev_End, 0, 0, 800, 800);
+      image(Dev[5], 0, 0, 800, 800);
     else
-      image(Dev, 0, 0, 800, 800);
+      image(Dev[0], 0, 0, 800, 800);
   
     image(Back, 0, 0, 800, 800);
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
@@ -306,57 +296,57 @@ void draw() {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
     sceneNum = 1;
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610){
-      B_Fore = loadImage("B_FORE_Garbage.PNG");
+      fore[0] = loadImage("B_FORE_Garbage.PNG");
       text("garbage", (relativeX-frontX), 440);
     } else if (relativeX >= 2090 && relativeX <= 2235 && mouseY >= 240 && mouseY <= 610){
-      B_Fore = loadImage("B_FORE_Sign.PNG");
+      fore[0] = loadImage("B_FORE_Sign.PNG");
     } else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610){
-      B_Fore = loadImage("B_FORE_Bench.PNG");
+      fore[0] = loadImage("B_FORE_Bench.PNG");
     } else
-      B_Fore = loadImage("B_FORE1.png");
-    display(B_Fore, B_Back, 3020, 2006);
+      fore[0] = loadImage("B_FORE1.png");
+    display(fore[0], back[0], 3020, 2006);
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy
-    if (clicked1 == true){
+    if (clicked[0] == true){
        timer += 0.1;
        text("stinky", 250, 740);
        if (timer >= 3){
          timer = 0;
-         clicked1 = false;
+         clicked[0] = false;
        }
      }
-     if (clicked2 == true) {
+     if (clicked[1] == true) {
        timer += 0.1;
        text("wait for the bus!", 250, 740);
        if (timer >= 5) {
          timer = 0;
-         clicked2 = false;
+         clicked[1] = false;
        }
      }
-     if (clicked3 == true) {
+     if (clicked[2] == true) {
        timer += 0.1;
        text("you're now waiting!", 250, 740);
        if (timer >= 5) {
          timer = -0.5;
-         clicked3 = false;
-         clickedT1 = true;
+         clicked[2] = false;
+         clicked[3] = true;
        }
      }
-     if (clickedT1 == true) {
+     if (clicked[3] == true) {
        timer += 0.1;
        text("the bus is here!", 250, 740);
        if (timer >= 4) {
          timer = -0.5;
-         clickedT1 = false;
-         clickedT2 = true;
+         clicked[3] = false;
+         clicked[4] = true;
        }
      }
-     if (clickedT2 == true) {
+     if (clicked[4] == true) {
        timer += 0.1;
        text("it looks a bit strange though...", 250, 740);
        if (timer >= 4) {
          timer = -0.5;
-         clickedT2 = false;
+         clicked[4] = false;
          text2half = true;
          scene = 2.5;
          backX = 0;
@@ -373,9 +363,9 @@ void draw() {
       sceneChange = false;
     }
     if (!inSchool)
-      display(S_Fore, S_Back, 2500, 2500);
+      display(fore[1], back[1], 2500, 2500);
     else{
-      display(H_Fore, H_Back, 2500, 2500);
+      display(fore[2], back[2], 2500, 2500);
       while (clock) {
         timer = timer + 0.001;
         if (timer == 1)
@@ -400,7 +390,7 @@ void draw() {
       locationX = 50;
       sceneChange = false;
     }
-    display(X1, black, 3222, 2000);
+    display(fore[3], back[3], 3222, 2000);
     if (text2half == true) {
       text("oh no! where are you?", 240, 740);
       if (scene == 3) {
@@ -415,7 +405,7 @@ void draw() {
       locationX = 50;
       sceneChange = false;
     }
-    display(X_Fore, X_Back, 4330, 2454);
+    display(fore[4], back[4], 4330, 2454);
     timer += 0.1;
     if (light) {
       light(4330);
@@ -489,11 +479,11 @@ void mousePressed() {
   
   if (scene == 1){
     if (relativeX >= 1955 && relativeX <= 2085 && mouseY >= 465 && mouseY <= 610)
-      clicked1 = true;
+      clicked[0] = true;
     else if (relativeX >= 2090 && relativeX <= 2235 && mouseY >= 240 && mouseY <= 610)
-      clicked2 = true;
+      clicked[1] = true;
     else if (relativeX >= 2260 && relativeX <= 2615 && mouseY >= 450 && mouseY <= 610)
-      clicked3 = true;
+      clicked[2] = true;
   }
   
   if (scene == 2.5) {
@@ -537,16 +527,9 @@ void keyPressed() {
     } else if (key == ' ' && jumping == false) {
       jumping = true;
       speedY = -40;
-      crouching = false;
-    } else if (key == 'q') {
+    } /*else if (key == 'q') {
       bully = true;
-    } else if (key == CODED) { //Processing reference: https://processing.org/reference/keyCode.html
-      if (keyCode == CONTROL) {
-        if (jumping == false) {
-          crouching = !crouching;
-        }
-      } // end keyCode
-    }
+    }*/
   }
   
   if (key == 'p') {
@@ -603,32 +586,7 @@ void walking() {
   }
 }//end walking
 
-/*
-void crouching() {
- if (crouching == true) {
- if (facingRight == true) {
- switch(frame) {
- case 0:
- character = character4R;
- break;
- case 10:
- character = character5R;
- break;
- }
- }
- if (facingRight == false) {
- switch(frame) {
- case 0:
- character = character4L;
- break;
- case 10:
- character = character5L;
- break;
- }
- }
- }
- }//end of crouching
- */
+
 void jumping() { //WITH HELP FROM MS. WIEBE CS10 (Modified)
   locationY += speedY;
   if (jumping == true) {
@@ -649,14 +607,13 @@ void moving() {
     if (facingRight == false)
       locationX -= 8;
     frame++;
-    if (frame == 20 && crouching == false) {
+    if (frame == 20) {
       frame = 5;
-    } else if (frame == 20 && crouching == true) {
+    } else if (frame == 20) {
       frame = 0;
     }
   }
-  if (crouching == false)
-    walking();
+  walking();
   //crouching();
   jumping();
 }//end moving
@@ -704,16 +661,16 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
     tint(255, 255);
     if (mouseX >= 235 && mouseX <= 545){
       if (mouseY >= 195 && mouseY <= 285)
-        image(PM_Return, 0, 0, 800, 800);
+        image(PM[1], 0, 0, 800, 800);
       else if (mouseY >= 320 && mouseY <= 410)
-        image(PM_Instructions, 0, 0, 800, 800);
+        image(PM[2], 0, 0, 800, 800);
       else if (mouseY >= 440 && mouseY <= 535)
-        image(PM_Settings, 0, 0, 800, 800);
+        image(PM[3], 0, 0, 800, 800);
       else
-        image(PM, 0, 0, 800, 800);
+        image(PM[0], 0, 0, 800, 800);
     }
     else
-      image(PM, 0, 0, 800, 800);
+      image(PM[0], 0, 0, 800, 800);
   }
   image(pause, 20, 20, 70, 70);
 } //end display
@@ -733,37 +690,37 @@ void light(int foreLength) {
     NL1 = true;
   }
   
-  int lights[] = {0, 1, 2, 3, 4, 5};
-  int random = (int)random(lights.length);
-  println(lights[random]);
+  //int lights[] = {0, 1, 2, 3, 4, 5};
+  int random = (int)random(0, 5);
+  println(random);
   
-  if (lights[random] <= 1) {
+  if (random <= 1) {
     ML2 = true;
-  } else if (lights[random] > 1 && lights[random] <= 3) {
+  } else if (random > 1 && random <= 3) {
     NL2 = true;
   }
   
   if (NL1) 
-    image(NL_1, frontX, 0, foreLength, 800);
+    image(lights[0], frontX, 0, foreLength, 800);
   if (NL2) 
-    image(NL_2, frontX, 0, foreLength, 800);
+    image(lights[1], frontX, 0, foreLength, 800);
   if (ML1) 
-    image(ML_1, frontX, 0, foreLength, 800);
+    image(lights[2], frontX, 0, foreLength, 800);
   if (ML2) 
-    image(ML_2, frontX, 0, foreLength, 800);
+    image(lights[3], frontX, 0, foreLength, 800);
      
   
   /* float light1 = random(1, 10);
   if (light1 >= 5)
-    image(NL_1, 0, 0);
+    image(lights[0], 0, 0);
   else 
-    image(NL_2, 0, 0);
+    image(lights[1], 0, 0);
        
   float light2 = random(1, 10);
   if (light2 >= 5)
-    image(ML_1, 0, 0);
+    image(lights[2], 0, 0);
   else 
-    image(ML_2, 0, 0); */
+    image(lights[3], 0, 0); */
     
 } //end light
 
