@@ -3,9 +3,10 @@
 to do:
   - put all pimages into arrays
   - change scene, sceneNum, and loadScene variables into int
-  - See if you can eliminate loadScene variable? (low priority)
+  - see if you can eliminate loadScene variable? (low priority)
   - overlapping text
   - eliminate clicked1, clicked2, etc? (low priority)
+  - add monsters!!
 
 instructions:
   - press 'a' to move left
