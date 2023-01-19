@@ -680,6 +680,7 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
 void light(int foreLength) {
   boolean lightb[] = { false, false, false, false };
   boolean swch1;
+  boolean death = false;
   
   float random1 = random(1,10);
   if (random1 <= 5) {
@@ -690,9 +691,9 @@ void light(int foreLength) {
   // int random = (int)random(0, 1);
   timerlight += 0.1;
   
-  if (timer%10 <= 5) {
+  if (timer%15 <= 8) {
     swch1 = true;
-  } if (timer%10 > 5) {
+  } if (timer%15 > 8) {
     swch1 = false;
   } else 
     swch1 = true;
@@ -700,15 +701,18 @@ void light(int foreLength) {
   if(swch1 == true) {
     lightb[3] = false;
     lightb[1] = true;
+    death = false;
     println("purple");
   } else {
     lightb[3] = true;
     lightb[1] = false;
-    if (relativeX >= 1498 && relativeX <= 1714) {
+    println("not purple");
+    death = true;
+  }
+  
+  if (relativeX >= 1498 && relativeX <= 1700 && death == true) {
         scene = 5;
     }
-    println("not purple");
-  }
   
   if (lightb[0]) 
     image(lights[0], frontX, 0, foreLength, 800);
