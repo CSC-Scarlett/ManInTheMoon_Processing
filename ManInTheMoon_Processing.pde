@@ -41,6 +41,7 @@ int transparency = 0;
 
 // Game logic
 float timer = 0;
+float timerlight = 0;
 boolean clock = false;
 boolean inSchool = false;
 boolean paused = false;
@@ -147,8 +148,8 @@ void setup() {
   OS[5] = loadImage("OS_Quit.PNG");
   //OS_Music = new SoundFile(this, "ElevatorMusic.wav");
 
-  Back = loadImage("BACK_white.PNG");
-  Back_S = loadImage("BACK_Red.PNG");
+  Back = loadImage("BACK_white.png");
+  Back_S = loadImage("BACK_Red.png");
 
   Instructions = loadImage("Instructions.png");
 
@@ -166,10 +167,10 @@ void setup() {
   charWalk[1] = loadImage("CHAR_walk2R.PNG");
   charWalk[2] = loadImage("CHAR_walk3R.PNG");
   charWalk[3] = loadImage("CHAR_walk4R.PNG");
-  charWalk[4] = loadImage("CHAR_walk1L.PNG");
-  charWalk[5] = loadImage("CHAR_walk2L.PNG");
-  charWalk[6] = loadImage("CHAR_walk3L.PNG");
-  charWalk[7] = loadImage("CHAR_walk4L.PNG");
+  charWalk[4] = loadImage("CHAR_walk1L.png");
+  charWalk[5] = loadImage("CHAR_walk2L.png");
+  charWalk[6] = loadImage("CHAR_walk3L.png");
+  charWalk[7] = loadImage("CHAR_walk4L.png");
   character = charWalk[0];
   
   // Monster Animation
@@ -201,10 +202,10 @@ void setup() {
   clock3 = loadImage("TEMP_Settings.png");
 
   // Xanadu
-  fore[3] = loadImage("hallway door alone.PNG");
+  fore[3] = loadImage("hallway door alone.png");
   back[3] = loadImage("black.PNG");
   back[4] = loadImage("X_BACK.png");
-  fore[4] = loadImage("X_FORE.PNG");
+  fore[4] = loadImage("X_FORE.png");
   lights[0] = loadImage("nightlight1.PNG");
   lights[1] = loadImage("nightlight2.PNG");
   lights[2] = loadImage("moonlight1.PNG");
@@ -382,7 +383,6 @@ void draw() {
     }// end else
     sceneChange = false;
   }//end scene 2
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
   else if (scene == 2.5) { 
     sceneNum = 2.5;
@@ -408,12 +408,10 @@ void draw() {
     display(fore[4], back[4], 4330, 2454);
     timer += 0.1;
     if (light) {
-      light(4330);
-      /* if (relativeX >= 1498 && relativeX <= 1714) {
-        scene = 5;
-      } */
+      light(4330); 
     }
-  }
+  } 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
   else if (scene == 4) { // good end (you escape!)
     
@@ -680,48 +678,48 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy
 void light(int foreLength) {
-  boolean NL1 = false;
-  boolean NL2 = false;
-  boolean ML1 = false;
-  boolean ML2 = false;
+  boolean lightb[] = { false, false, false, false };
+  boolean swch1;
   
   float random1 = random(1,10);
   if (random1 <= 5) {
-    NL1 = true;
+    lightb[0] = true;
   }
   
   //int lights[] = {0, 1, 2, 3, 4, 5};
-  int random = (int)random(0, 5);
-  println(random);
+  // int random = (int)random(0, 1);
+  timerlight += 0.1;
   
-  if (random <= 1) {
-    ML2 = true;
-  } else if (random > 1 && random <= 3) {
-    NL2 = true;
+  if (timer%10 <= 5) {
+    swch1 = true;
+  } if (timer%10 > 5) {
+    swch1 = false;
+  } else 
+    swch1 = true;
+  
+  if(swch1 == true) {
+    lightb[3] = false;
+    lightb[1] = true;
+    println("purple");
+  } else {
+    lightb[3] = true;
+    lightb[1] = false;
+    if (relativeX >= 1498 && relativeX <= 1714) {
+        scene = 5;
+    }
+    println("not purple");
   }
   
-  if (NL1) 
+  if (lightb[0]) 
     image(lights[0], frontX, 0, foreLength, 800);
-  if (NL2) 
+  if (lightb[1]) 
     image(lights[1], frontX, 0, foreLength, 800);
-  if (ML1) 
+  if (lightb[2]) 
     image(lights[2], frontX, 0, foreLength, 800);
-  if (ML2) 
+  if (lightb[3]) 
     image(lights[3], frontX, 0, foreLength, 800);
-     
-  
-  /* float light1 = random(1, 10);
-  if (light1 >= 5)
-    image(lights[0], 0, 0);
-  else 
-    image(lights[1], 0, 0);
-       
-  float light2 = random(1, 10);
-  if (light2 >= 5)
-    image(lights[2], 0, 0);
-  else 
-    image(lights[3], 0, 0); */
-    
+
+
 } //end light
 
 void text() {
