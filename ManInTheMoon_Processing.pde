@@ -182,9 +182,9 @@ void setup() {
   pause = loadImage("Pause.PNG");
   black = loadImage("black.PNG");
   PM[0] = loadImage("PM.PNG");
-  PM[1] = loadImage("PM[1].PNG");
-  PM[2] = loadImage("PM[2].PNG");
-  PM[3] = loadImage("PM[3].PNG");
+  PM[1] = loadImage("PM_Return.PNG");
+  PM[2] = loadImage("PM_Instructions.PNG");
+  PM[3] = loadImage("PM_Settings.PNG");
 
   // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   back[0] = loadImage("B_BACK.PNG");
@@ -690,13 +690,13 @@ void light(int foreLength) {
     NL1 = true;
   }
   
-  int lights[] = {0, 1, 2, 3, 4, 5};
-  int random = (int)random(lights.length);
-  println(lights[random]);
+  //int lights[] = {0, 1, 2, 3, 4, 5};
+  int random = (int)random(0, 5);
+  println(random);
   
-  if (lights[random] <= 1) {
+  if (random <= 1) {
     ML2 = true;
-  } else if (lights[random] > 1 && lights[random] <= 3) {
+  } else if (random > 1 && random <= 3) {
     NL2 = true;
   }
   
