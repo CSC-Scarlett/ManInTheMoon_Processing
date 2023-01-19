@@ -8,7 +8,7 @@ import processing.sound.*; // sound library import
 float scene = -1;
 float sceneNum = 0;
 boolean playing = true;
-int loadScene = -1;
+float loadScene = -1;
 
 //aesthetics :)))))))))))))))))))))))))))))))))))))))))000
 PFont subtitle;
@@ -319,7 +319,7 @@ void draw() {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy
     if (clicked1 == true){
        timer += 0.1;
-       text("you", 250, 740);
+       text("stinky", 250, 740);
        if (timer >= 3){
          timer = 0;
          clicked1 = false;
@@ -455,6 +455,8 @@ void mousePressed() {
       loadScene = -3;
     else if (mouseX >= 475 && mouseX <= 565 && mouseY >= 395 && mouseY <= 425) // Developer mode
       loadScene = -4;
+    else if (mouseX >= 475 && mouseX <= 530 && mouseY >= 435 && mouseY <= 470) //quit
+        exit(); //Processing reference: https://processing.org/reference/exit_.html
   } // end loadingScreen mousePressed
 
   if (scene == -1) { //start button
@@ -464,7 +466,7 @@ void mousePressed() {
 
   if (scene == -2 || scene == -3 || scene == -4) { //back button
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
-      scene = sceneNum;
+      loadScene = sceneNum;
   }
 
   if (scene == -4) { //Dev menu
@@ -538,7 +540,7 @@ void keyPressed() {
       crouching = false;
     } else if (key == 'q') {
       bully = true;
-    } else if (key == CODED) {
+    } else if (key == CODED) { //Processing reference: https://processing.org/reference/keyCode.html
       if (keyCode == CONTROL) {
         if (jumping == false) {
           crouching = !crouching;
@@ -790,26 +792,31 @@ void text() {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
-void transition(int nextScene){
+void transition(float nextScene){
   if (loadScene != -100){
     do{
-      tint(255, transparency);
-      image(black, 0, 0, 800, 800);
-      tint(255, 255);
-      if (transparency < 255 && fadeIn == false)
+      if (transparency < 255 && fadeIn == false){
         transparency += 5;
+        println(transparency);
+      }
       else if (transparency == 255){
         scene = nextScene;
         fadeIn = true;
       }
-      if (transparency > 0 && fadeIn == true)
+      if (transparency > 0 && fadeIn == true){
         transparency -= 5;
+        println(transparency);
+      }
       if (transparency == 0 && fadeIn == true){
         transparency = 0;
         fadeIn = false;
         loadScene = -100;
+        println("end");
       }
     }while(transparency != 0 && fadeIn == false);
+    tint(255, transparency);
+    image(black, 0, 0, 800, 800);
+    tint(255, 255);
   }//end big if
     /*if (transition == true) {
       image(black, 0, 0);
