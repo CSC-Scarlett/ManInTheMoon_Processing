@@ -1,8 +1,12 @@
 # ManInTheMoon_Processing
 
 to do:
-  - remember to load character sprites from array, not as individual variables
-  - jumping works now but it SUCKS why can you still ascend
+  - put all pimages into arrays
+  - change scene, sceneNum, and loadScene variables into int
+  - see if you can eliminate loadScene variable? (low priority)
+  - overlapping text
+  - eliminate clicked1, clicked2, etc? (low priority)
+  - add monsters!!
 
 instructions:
   - press 'a' to move left
