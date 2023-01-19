@@ -173,10 +173,10 @@ void setup() {
   character = charWalk[0];
   
   // Monster Animation
-  monWalk[0] = loadImage("TEMP_Settings.png");
-  monWalk[1] = loadImage("TEMP_Dev.png");
-  monWalk[2] = loadImage("TEMP_Settings.png");
-  monWalk[3] = loadImage("TEMP_Dev.png");
+  monWalk[0] = loadImage("Monster1R.png");
+  monWalk[1] = loadImage("Monster2R.png");
+  monWalk[2] = loadImage("Monster1L.png");
+  monWalk[3] = loadImage("Monster2L.png");
   monster = monWalk[0];
   
   pause = loadImage("Pause.PNG");
