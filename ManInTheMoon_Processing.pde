@@ -16,15 +16,16 @@ PImage black;
 // Chang'e animation sprites
 PImage character; //current Chang'e frame
 PImage charWalk[] = new PImage[8]; //0 and 4 stationary, 0-3 right facing, 4-7 left facing
+PImage charBully[] = new PImage[4]; //0-1 right facing, 1-2 left facing
 
 // Monster sprite (only one design)
-PImage monster; // current monster frame
+PImage monster; //current monster frame
 PImage monWalk[] = new PImage[4]; //0-1 right facing, 1-2 left facing
 
 // Sprite control
 boolean jumping = false;
 boolean move = false;
-//boolean bully = false;
+boolean bully = false;
 boolean facingRight = true;
 int locationX = 50;
 int locationY = 400;
@@ -32,7 +33,7 @@ int speedY = 0;
 int frame = 0;
 int char_relativeX; //Chang'e
 int monLocationY = -300;
-int mon_relativeX = 0;
+int mon_relativeX = 0; //monster
 int monFrame;
 
 // Environment animation
@@ -44,11 +45,14 @@ int transparency = 0;
 int M_relativeX; //mouse
 
 // Game logic
+float xTimer = 0; //just for xanadu text
 float timer = 0;
 float timerlight = 0;
 boolean clock = false;
 boolean inSchool = false;
 boolean paused = false;
+boolean trappedText = false;
+boolean monsterText = false;
 boolean sceneChange = false;
 boolean ending[] = {false, false, false}; //0 is good ending, 1 is death from monster, 2 is death from lights
 boolean light = true;
@@ -88,10 +92,11 @@ PImage fore[] = new PImage[5]; //foreground
 PImage back[] = new PImage[5]; //background
 /*
 0: bus stop
-1: school
-2: school hallway
+1: school **
+2: school hallway **
 3: dark hallway
 4: xanadu
+** = currently not playable
 */
 
 PImage lights[] = new PImage[4];
@@ -114,30 +119,35 @@ PImage pause_S;
 PImage Instructions;
 PImage Settings;
 
-
+/*
 // Props
+**currently not playable
 PImage clock1;
 PImage clock2;
 PImage clock3;
-//PImage note;
-//PImage bus;
-//PImage door1;
-//PImage door2;
+PImage note;
+PImage bus;
+PImage door1;
+PImage door2;
+*/
 
+/*
 // Music
+**not included due to storage and quality issues
 //boolean play1 = false;
 //SoundFile OS_Music;
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////// Prelims /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
-  size(800, 800); //my fav line of code #2
+  size(800, 800);
   background(255);
-
   frameRate(1000);
   
+  // Fonts
   subtitle = createFont("Arial Narrow", 25);
 
   // Start screen
@@ -153,13 +163,15 @@ void setup() {
   OS[5] = loadImage("OS_Quit.PNG");
   //OS_Music = new SoundFile(this, "ElevatorMusic.wav");
 
+  // Back buttons
   Back = loadImage("BACK_white.PNG");
   Back_S = loadImage("BACK_Red.PNG");
 
+  // Menus
   Instructions = loadImage("Instructions.png");
-
   Settings = loadImage("Settings.png");
 
+  // Developer menu
   Dev[0] = loadImage("DEV.png");
   Dev[1] = loadImage("DEV_Start.png");
   Dev[2] = loadImage("DEV_S1.png");
@@ -176,6 +188,10 @@ void setup() {
   charWalk[5] = loadImage("CHAR_walk2L.PNG");
   charWalk[6] = loadImage("CHAR_walk3L.PNG");
   charWalk[7] = loadImage("CHAR_walk4L.PNG");
+  charBully[0] = loadImage("CHAR_punch1R.png");
+  charBully[1] = loadImage("CHAR_punch2R.png");
+  charBully[2] = loadImage("CHAR_punch1L.png");
+  charBully[3] = loadImage("CHAR_punch2L.png");
   character = charWalk[0];
   
   // Monster Animation
@@ -185,6 +201,7 @@ void setup() {
   monWalk[3] = loadImage("Monster2L.png");
   monster = monWalk[0];
   
+  // Pause menu
   pause = loadImage("Pause.PNG");
   black = loadImage("black.PNG");
   PM[0] = loadImage("PM.PNG");
@@ -192,19 +209,22 @@ void setup() {
   PM[2] = loadImage("PM_Instructions.PNG");
   PM[3] = loadImage("PM_Settings.PNG");
 
-  // Bus stop + school cameo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  // Bus stop
   back[0] = loadImage("B_BACK.PNG");
   fore[0] = loadImage("B_FORE1.png");
 
+  /*
   // School
   back[1] = loadImage("TEMP_School.png");
   fore[1] = loadImage("TEMP_School.png");
   back[2] = loadImage("TEMP_Hallway.png");
   fore[2] = loadImage("TEMP_Hallway.png");
   
+  //Props
   clock1 = loadImage("clock full.png");
   clock2 = loadImage("TEMP_Settings.png");
   clock3 = loadImage("TEMP_Settings.png");
+  */
 
   // Xanadu
   fore[3] = loadImage("hallway door alone.PNG");
@@ -216,20 +236,25 @@ void setup() {
   lights[2] = loadImage("moonlight1.PNG");
   lights[3] = loadImage("moonlight2.PNG");
 
-  /* if (play1 == true) {
+  /* 
+  if (play1 == true) {
     OS_Music.loop();
     play1 = false;
-  } */
+  } 
+  */
 } //end setup
 
 
 void draw() {
-  /*play1 = true;
+  /*
+  play1 = true;
   if (play1) {
     OS_Music.play();
     OS_Music.loop();
     play1 = false;
-  }*/
+  }
+  */
+  
   M_relativeX = abs(frontX) + mouseX;
   char_relativeX = abs(frontX) + locationX;
   
@@ -262,16 +287,14 @@ void draw() {
   //////////////////////////////////////////////// scene -2 ////////////////////////////////////////////////
   else if (scene == -2) { // game settings
     image(Settings, 0, 0, 800, 800);
-    image(Back, 0, 0, 800, 800);
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
       image(Back_S, 0, 0, 800, 800);
     else
-    image(Back, 0, 0, 800, 800);
+      image(Back, 0, 0, 800, 800);
   }
   //////////////////////////////////////////////// scene -3 ////////////////////////////////////////////////
   else if (scene == -3) { // instructions
      image(Instructions, 0, 0, 800, 800);
-     image(Back, 0, 0, 800, 800);
      if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
        image(Back_S, 0, 0, 800, 800);
      else
@@ -292,7 +315,6 @@ void draw() {
     else
       image(Dev[0], 0, 0, 800, 800);
   
-    image(Back, 0, 0, 800, 800);
     if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
       image(Back_S, 0, 0, 800, 800);
     else
@@ -313,49 +335,56 @@ void draw() {
       fore[0] = loadImage("B_FORE1.png");
     display(fore[0], back[0], 3020, 2006);
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dorothy (Debugging by Jen)
     if (clicked[0] == true){
        timer += 0.1;
-       text("stinky", 250, 740);
-       if (timer >= 3){
+       textAlign(CENTER);
+       text("stinky", 400, 740);
+       if (timer >= 3 || clicked[1] || clicked[2] || clicked[3] || clicked[4]){
          timer = 0;
          clicked[0] = false;
        }
      }
-     if (clicked[1] == true) {
+     else if (clicked[1] && !clicked[4]) {
        timer += 0.1;
-       text("wait for the bus!", 250, 740);
-       if (timer >= 5) {
+       textAlign(CENTER);
+       text("have a seat, wait for the bus!", 400, 740);
+       if (timer >= 5 || clicked[0] || clicked[2] || clicked[3] || clicked[4]) {
          timer = 0;
          clicked[1] = false;
        }
      }
-     if (clicked[2] == true) {
+     else if (clicked[2] == true) {
        timer += 0.1;
-       text("you're now waiting!", 250, 740);
-       if (timer >= 5) {
+       textAlign(CENTER);
+       text("you're now waiting for the bus!", 400, 740);
+       if (timer >= 5  || clicked[0] || clicked[1] || clicked[3] || clicked[4]) {
+         if (timer >= 5)
+           clicked[3] = true;
          timer = -0.5;
          clicked[2] = false;
-         clicked[3] = true;
        }
      }
-     if (clicked[3] == true) {
+     else if (clicked[3] == true) {
        timer += 0.1;
-       text("the bus is here!", 250, 740);
-       if (timer >= 4) {
+       textAlign(CENTER);
+       text("the bus is here! let's go back to the sign.", 400, 740);
+       /*if (timer >= 4  || clicked[0] || clicked[1] || clicked[2] || clicked[4]) {
+         if (timer >= 4)
+           clicked[4] = true;
          timer = -0.5;
          clicked[3] = false;
-         clicked[4] = true;
-       }
+       }*/
      }
-     if (clicked[4] == true) {
+     else if (clicked[4]) {
        timer += 0.1;
-       text("it looks a bit strange though...", 250, 740);
-       if (timer >= 4) {
+       textAlign(CENTER);
+       text("it looks a bit strange though...", 400, 740);
+       if (timer >= 4  || clicked[0] || clicked[1] || clicked[2] || clicked[3]) {
          timer = -0.5;
          clicked[4] = false;
          text2half = true;
-         scene = 2.5;
+         scene = 2;
          backX = 0;
          frontX = 0;
          locationX = 50;
@@ -365,7 +394,7 @@ void draw() {
        timer = 0;
   }//end scene 1
 //////////////////////////////////////////////// school 1 ////////////////////////////////////////////////
-  else if (scene == 2) {
+/*  else if (scene == 2) {
     sceneNum = 2;
     if (sceneChange) {
       locationX = 50;
@@ -390,17 +419,24 @@ void draw() {
       } //end while
     }// end else
     sceneChange = false;
-  }//end scene 2
+  }//end scene 2*/
   //////////////////////////////////////////////// xanadu1 ////////////////////////////////////////////////
-  else if (scene == 2.5) { 
-    sceneNum = 2.5;
+  else if (scene == 2) { 
+    sceneNum = 2;
     if (sceneChange) {
       locationX = 50;
       sceneChange = false;
     }
     display(fore[3], back[3], 3222, 2000);
     if (text2half == true) {
-      text("oh no! where are you?", 240, 740);
+      textAlign(CENTER);
+      if (timer < 15){
+        text("oh no! where are you? this isn't the bus...", 400, 740);
+        timer += 0.1;
+      } else {
+        timer = 0;
+        text2half = false;
+      }
       if (scene == 3) {
         text2half = false;
       }
@@ -418,16 +454,44 @@ void draw() {
     if (light) {
       light(4330); 
     }
-    if (char_relativeX >= 4000)
-      scene = 4;
-  } 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
+    if (char_relativeX >= 4000){
+      loadScene = 4;
+      sceneNum = 0;
+    }
+    if (monsterText){
+      if (xTimer < 9){
+        xTimer += 0.1;
+        textAlign(CENTER);
+        text("what is that?! quick, up ahead: maybe you can lure it into the lights!", 400, 740);
+        text("NIGHTLIGHT SAFE, WHITELIGHT RAZE", 400, 150);
+      } else{
+        xTimer = 0;
+        monsterText = false;
+      }
+    }if (trappedText && xTimer != 7){
+      if (xTimer < 5){
+        xTimer += 0.1;
+        textAlign(CENTER);
+        text("it seems to be trapped in the light. you're safe... for now.", 400, 740);
+      } else{
+        trappedText = false;
+      }
+    }//end trappedText
+  }
   /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
   else if (scene == 4) { // good end (you escape!)
     background(0);
     textAlign(CENTER, CENTER);
     text("...What is this place?", 400, 400);
+    if (mouseX >= 50 && mouseX <= 210 && mouseY >= 675 && mouseY <= 755)
+      image(Back_S, 0, 0, 800, 800);
+    else
+      image(Back, 0, 0, 800, 800);
   } 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   /////////////////////////////////////////////// end2 /////////////////////////////////////////////////
   else if (scene == 5) { // bad end (you died O_O)
     endScreen();
@@ -437,15 +501,7 @@ void draw() {
 
 
 
-void mousePressed() {
-  //println(mouseX + " " + mouseY);
-  //println(M_relativeX + " " + mouseY); 
-  
-  if (scene == 3) {
-    //println(M_relativeX);
-    //println(frontX);
-  }
-
+void mousePressed() { 
   if (scene == 0) {
     if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305) //Start
       loadScene = 1;
@@ -456,7 +512,7 @@ void mousePressed() {
     else if (mouseX >= 475 && mouseX <= 565 && mouseY >= 395 && mouseY <= 425) // Developer mode
       loadScene = -4;
     else if (mouseX >= 475 && mouseX <= 530 && mouseY >= 435 && mouseY <= 470) //quit
-        exit(); //Processing reference: https://processing.org/reference/exit_.html
+      exit(); //Processing reference: https://processing.org/reference/exit_.html
   } // end loadingScreen mousePressed
 
   if (scene == -1) { //start button
@@ -474,8 +530,10 @@ void mousePressed() {
       loadScene = -1;
     else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 295 && mouseY <= 355)
       loadScene = 1;
-    else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435)
+    else if (mouseX >= 130 && mouseX <= 270 && mouseY >= 375 && mouseY <= 435){
       loadScene = 2;
+      text2half = true;
+    }
     else if (mouseX >= 130 && mouseX <= 275 && mouseY >= 450 && mouseY <= 510){
       loadScene = 3;
       mon_relativeX = 0;
@@ -491,13 +549,17 @@ void mousePressed() {
   if (scene == 1){
     if (M_relativeX >= 1955 && M_relativeX <= 2085 && mouseY >= 465 && mouseY <= 610)
       clicked[0] = true;
+    else if (clicked[3] && M_relativeX >= 2090 && M_relativeX <= 2235 && mouseY >= 240 && mouseY <= 610){
+      clicked[4] = true;
+      clicked[3] = false;
+    }
     else if (M_relativeX >= 2090 && M_relativeX <= 2235 && mouseY >= 240 && mouseY <= 610)
       clicked[1] = true;
     else if (M_relativeX >= 2260 && M_relativeX <= 2615 && mouseY >= 450 && mouseY <= 610)
       clicked[2] = true;
   }
   
-  if (scene == 2.5) {
+  if (scene == 2) {
     if (mouseX >= 417 && mouseX <= 660 && mouseY >= 160 && mouseY <= 610) {
       loadScene = 3;
       locationX = 50;
@@ -523,10 +585,6 @@ void mousePressed() {
   }
 }//end mousePressed
 
-
-void mouseReleased() {
-}//end mouseReleased
-
 void keyPressed() {
   if (!paused){
     if (key == 'd') {
@@ -538,31 +596,32 @@ void keyPressed() {
     } else if (key == ' ' && jumping == false) {
       jumping = true;
       speedY = -40;
-    } /*else if (key == 'q') {
+    } else if (key == 'q') {
       bully = true;
-    }*/
-  }
-  
-  if (key == 'p') {
-    scene = 2.5;
-  }
-
-  // 'e' key for interaction
-  // 'q' key to hit
+    }
+  } 
 }//end keyPressed
 
 void keyReleased() {
   frame = 0;
   if (key == 'd' || key == 'a')
     move = false;
+  if (key == 'q')
+    bully = false;
 }//end keyReleased
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////// Movement /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
+/*
+The following movement methods are all taken from my computing science 10 assignment, Out of Sight.
+Walking: basically no modifications except to change character PImage names to array elements
+Jumping: removed table interaction, simplified the method as well using my new knowledge of physics
+and programming
+Moving: also very little modifications, called on bullying and removed the call for crouching
+*/
 void walking() {
   if (facingRight == true) {
     switch(frame) {
@@ -598,7 +657,7 @@ void walking() {
 }//end walking
 
 
-void jumping() { //WITH HELP FROM MS. WIEBE CS10 (Modified)
+void jumping() { //WITH HELP FROM MS. WIEBE
   locationY += speedY;
   if (jumping == true) {
     speedY += 4;
@@ -620,25 +679,43 @@ void moving() {
     frame++;
     if (frame == 20) {
       frame = 5;
-    } /*else if (frame == 20) {
+    } else if (frame == 20) {
       frame = 0;
-    }*/
+    }
   }
   walking();
-  //crouching();
   jumping();
+  bullying();
 }//end moving
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 void bullying() {
+  if (bully == true){
+    if (facingRight == true){
+      switch(frame%2){
+        case 0:
+          character = charBully[0];
+          break;
+        case 1:
+          character = charBully[1];
+          break;
+      }
+    } else if (facingRight == false){
+      switch(frame%2) {
+        case 0:
+          character = charBully[2];
+          break;
+        case 1:
+          character = charBully[3];
+          break;
+      }
+    }
+  }//end if bully
 } //end bullying! 👨
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////// story //////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
 void display(PImage foreground, PImage background, int foreLength, int backLength) {
@@ -669,7 +746,7 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
       pause = loadImage("Pause_Glow.PNG");
     else
       pause = loadImage("Pause.PNG");
-  }
+  }//end if not paused (hovering)
   if (paused){
     tint(255, 127);
     image(black, 0, 0, 800, 800);
@@ -683,10 +760,9 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
         image(PM[3], 0, 0, 800, 800);
       else
         image(PM[0], 0, 0, 800, 800);
-    }
-    else
+    } else
       image(PM[0], 0, 0, 800, 800);
-  }
+  }//end if paused (pause menu)
   image(pause, 20, 20, 70, 70);
 } //end display
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -703,9 +779,7 @@ void light(int foreLength) {
   if (random1 <= 5) {
     lightb[0] = true;
   }
-  
-  //int lights[] = {0, 1, 2, 3, 4, 5};
-  // int random = (int)random(0, 1);
+
   timerlight += 0.1;
   
   if (timer%15 <= 8) {
@@ -718,16 +792,14 @@ void light(int foreLength) {
   if(swch1 == true) {
     lightb[3] = false;
     lightb[1] = true;
-    //println("purple");
   } else {
     lightb[3] = true;
     lightb[1] = false;
     if (char_relativeX >= 1498 && char_relativeX <= 1714) {
-        scene = 5;
+        loadScene = 5;
         sceneNum = 0;
         randomizeText = true;
     }
-    //println("not purple");
   }
   
   if (lightb[0]) 
@@ -741,6 +813,8 @@ void light(int foreLength) {
 
 
 } //end light
+
+
 
 void endScreen() {
   int textNum = 0;
@@ -774,27 +848,23 @@ void endScreen() {
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Jen
 void transition(float nextScene){
   if (loadScene != -100){
     do{
       if (transparency < 255 && fadeIn == false){
         transparency += 5;
-        println(transparency);
-      }
-      else if (transparency == 255){
+      } else if (transparency == 255 && fadeIn == false){
         scene = nextScene;
         fadeIn = true;
-      }
-      if (transparency > 0 && fadeIn == true){
+      } if (transparency > 0 && fadeIn == true){
         transparency -= 5;
-        println(transparency);
-      }
-      if (transparency == 0 && fadeIn == true){
+      } if (transparency == 0 && fadeIn == true){
         transparency = 0;
         fadeIn = false;
         loadScene = -100;
-        println("end");
       }
     }while(transparency != 0 && fadeIn == false);
     tint(255, transparency);
@@ -804,11 +874,11 @@ void transition(float nextScene){
 } //end transition
 
 
+
 void monster(){
-  println(char_relativeX);
-  //println(mon_relativeX);
   if (char_relativeX >= 500 && mon_relativeX == 0){
     mon_relativeX = char_relativeX;
+    monsterText = true;
   }
   else if (mon_relativeX != 0 && !paused){
     if (monLocationY <= 370){
@@ -847,14 +917,15 @@ void monster(){
 //character collision
     if (locationY <= (monLocationY + 20) && locationY >= (monLocationY - 150)){
       if (char_relativeX >= (mon_relativeX - 50) && char_relativeX <= (mon_relativeX + 50)){
-        scene = 5;
+        loadScene = 5;
         sceneNum = 0;
         randomizeText = true;
       }
     }
 //trapped in light
-    if (mon_relativeX >= 1525) {
-      mon_relativeX = 1525;
+    if (mon_relativeX >= 1510) {
+      mon_relativeX = 1510;
+      trappedText = true;
     }
   }//end else if
 }// end monster
