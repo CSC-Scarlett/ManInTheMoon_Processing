@@ -58,6 +58,7 @@ boolean ending[] = {false, false, false}; //0 is good ending, 1 is death from mo
 boolean light = true;
 boolean fadeIn = false;
 boolean randomizeText = false;
+boolean reset = false;
 
 // Backgrounds
 PImage OS[] = new PImage[6]; //opening screen
@@ -271,6 +272,15 @@ void draw() {
   }
   //////////////////////////////////////////////// scene 0 ////////////////////////////////////////////////
   else if (scene == 0) { // OS screen
+    if (reset){
+      locationX = 50;
+      frontX = 0;
+      backX = 0;
+      monLocationY = -300;
+      mon_relativeX = 0;
+      facingRight = true;
+      reset = false;
+    }
     if (mouseX >= 475 && mouseX <= 530 && mouseY >= 275 && mouseY <= 305)
       image(OS[1], 0, 0, 800, 800);
     else if (mouseX >= 475 && mouseX <= 550 && mouseY >= 310 && mouseY <= 345)
@@ -480,6 +490,7 @@ void draw() {
         trappedText = false;
       }
     }//end trappedText
+    reset = true;
   }
   /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
   else if (scene == 4) { // good end (you escape!)
@@ -490,6 +501,7 @@ void draw() {
       image(Back_S, 0, 0, 800, 800);
     else
       image(Back, 0, 0, 800, 800);
+    reset = true;
   } 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   /////////////////////////////////////////////// end2 /////////////////////////////////////////////////
@@ -560,7 +572,8 @@ void mousePressed() {
   }
   
   if (scene == 2) {
-    if (mouseX >= 417 && mouseX <= 660 && mouseY >= 160 && mouseY <= 610) {
+    println(M_relativeX);
+    if (M_relativeX >= 2266 && M_relativeX <= 2510 && mouseY >= 160 && mouseY <= 610) {
       loadScene = 3;
       locationX = 50;
       backX = 0;
@@ -570,16 +583,16 @@ void mousePressed() {
   
   if (paused) {
     if (mouseX >= 235 && mouseX <= 545){
-      if (mouseY >= 195 && mouseY <= 285){
+      if (mouseY >= 195 && mouseY <= 285){ //return to menu
         loadScene = 0;
         backX = 0;
         frontX = 0;
         locationX = 50;
         paused = false;
       }
-      else if (mouseY >= 320 && mouseY <= 410)
+      else if (mouseY >= 320 && mouseY <= 410) //settings
         loadScene = -3;
-      else if (mouseY >= 440 && mouseY <= 535)
+      else if (mouseY >= 440 && mouseY <= 535) //instruction
         loadScene = -2;
     }
   }
@@ -773,7 +786,6 @@ void display(PImage foreground, PImage background, int foreLength, int backLengt
 void light(int foreLength) {
   boolean lightb[] = { false, false, false, false };
   boolean swch1;
-  boolean death = false;
   
   float random1 = random(1,10);
   if (random1 <= 5) {
