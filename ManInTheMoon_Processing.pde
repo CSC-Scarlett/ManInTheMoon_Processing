@@ -730,10 +730,6 @@ void light(int foreLength) {
     //println("not purple");
   }
   
-  if (relativeX >= 1498 && relativeX <= 1700 && death == true) {
-        scene = 5;
-    }
-  
   if (lightb[0]) 
     image(lights[0], frontX, 0, foreLength, 800);
   if (lightb[1]) 
