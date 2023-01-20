@@ -418,11 +418,15 @@ void draw() {
     if (light) {
       light(4330); 
     }
+    if (char_relativeX >= 4000)
+      scene = 4;
   } 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   /////////////////////////////////////////////// end1 /////////////////////////////////////////////////
   else if (scene == 4) { // good end (you escape!)
-    
+    background(0);
+    textAlign(CENTER, CENTER);
+    text("...What is this place?", 400, 400);
   } 
   /////////////////////////////////////////////// end2 /////////////////////////////////////////////////
   else if (scene == 5) { // bad end (you died O_O)
@@ -839,13 +843,17 @@ void monster(){
         break;
       }
     }
-//death collision
+//character collision
     if (locationY <= (monLocationY + 20) && locationY >= (monLocationY - 150)){
       if (char_relativeX >= (mon_relativeX - 50) && char_relativeX <= (mon_relativeX + 50)){
         scene = 5;
         sceneNum = 0;
         randomizeText = true;
       }
+    }
+//trapped in light
+    if (mon_relativeX >= 1525) {
+      mon_relativeX = 1525;
     }
   }//end else if
 }// end monster
