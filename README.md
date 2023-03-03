@@ -18,6 +18,7 @@ Notes:
   - We are contractually bound to strictly prohibit the use of gore to scare people and thus will need to use ambience for the horror.
   - Please use Party Let as the font if text is needed
   - There will be no dialogue (may change)
+
 Github: 
   - Please do not force push the code if your code conflicts with main (the team will go over the code if there are conflicts -- please communicate the conflicts through the discord (invite: ) if you are working remotely)
 
