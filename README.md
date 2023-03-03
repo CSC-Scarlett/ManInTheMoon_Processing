@@ -6,11 +6,11 @@ Link to TMITM Drive folder: https://drive.google.com/drive/folders/1yrLr6WwsbQbn
 
 
 Team members:
-  Code: Daniel (LEAD), Nathan, Aiden, Samantha, Paul, Kris, Oliver, Dorothy, Jennifer, Andy
+  - Code: Daniel (LEAD), Nathan, Aiden, Samantha, Paul, Kris, Oliver, Dorothy, Jennifer, Andy
   
-  Graphics: Hayley (LEAD), Andy, Mandy, Melissa, Dorothy
+  - Graphics: Hayley (LEAD), Andy, Mandy, Melissa, Dorothy
   
-  SFX: Jessica (LEAD), Hilary, William, Aiden
+  - SFX: Jessica (LEAD), Hilary, William, Aiden
 
 
 Notes:
