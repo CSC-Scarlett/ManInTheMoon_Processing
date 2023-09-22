@@ -10,11 +10,11 @@ Link to Software Design doc: https://docs.google.com/document/d/1bmY6-5FwD01UFe1
 
 
 Team members:
-  - Code: Daniel (LEAD), Nathan, Aiden, Samantha, Paul, Kris, Oliver, Dorothy, Jennifer, Andy
+  - Code: Daniel (LEAD), Nathan, Aidan, Samantha, Paul, Kris, Oliver, Dorothy, Jennifer, Andy
   
   - Graphics: Hayley (LEAD), Andy, Mandy, Melissa, Dorothy
   
-  - SFX: Jessica (LEAD), Hilary, William, Aiden
+  - SFX: Jessica (LEAD), Hilary, William, Aidan
 
 
 Notes:
